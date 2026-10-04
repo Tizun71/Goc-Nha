@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "design-my-room": {
+      "command": "node",
+      "args": ["D:/Workspace/Start up/design-my-room/mcp/server.ts"]
+    }
+  }
+}
