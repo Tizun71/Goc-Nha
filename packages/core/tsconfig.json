@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    /* DOM only for the CanvasRenderingContext2D type used by the 2D drawings */
+    "lib": ["ES2023", "DOM"],
+    "types": []
+  },
+  "include": ["src"]
+}

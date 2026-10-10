@@ -1,0 +1,33 @@
+{
+  "name": "@goc-nha/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Góc Nhà web app: 2D editor, isometric preview and AI bridge.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@goc-nha/core": "workspace:*",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "konva": "^10.7.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-konva": "^19.3.0",
+    "three": "^0.186.1",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@types/three": "^0.186.0",
+    "@types/ws": "^8.18.2",
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.0",
+    "ws": "^8.22.0"
+  }
+}
