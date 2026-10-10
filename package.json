@@ -1,40 +1,36 @@
 {
   "name": "goc-nha",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "typecheck": "tsc -b",
-    "mcp": "node mcp/server.ts"
+  "version": "0.1.0",
+  "description": "Plan your room before you buy furniture: a 2D and isometric 3D room planner with real-size furniture, daylight simulation and an MCP server for Claude.",
+  "license": "AGPL-3.0-or-later",
+  "author": "Tizun71",
+  "homepage": "https://github.com/Tizun71/Goc-Nha#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tizun71/Goc-Nha.git"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.32.0",
-    "@react-three/drei": "^10.7.9",
-    "@react-three/fiber": "^9.8.1",
-    "konva": "^10.7.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-konva": "^19.3.0",
-    "three": "^0.186.1",
-    "ws": "^8.22.0",
-    "zod": "^4.6.5",
-    "zustand": "^5.0.15"
+  "bugs": {
+    "url": "https://github.com/Tizun71/Goc-Nha/issues"
+  },
+  "type": "module",
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @goc-nha/web dev",
+    "build": "tsc -b && pnpm --filter @goc-nha/web build",
+    "preview": "pnpm --filter @goc-nha/web preview",
+    "lint": "oxlint",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "mcp": "pnpm --filter @goc-nha/mcp-server start"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@types/three": "^0.186.0",
-    "@types/ws": "^8.18.2",
-    "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.81.0",
     "typescript": "~6.0.2",
-    "vite": "^8.3.0",
     "vitest": "^5.0.3"
   }
 }

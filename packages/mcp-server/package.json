@@ -1,0 +1,21 @@
+{
+  "name": "@goc-nha/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server that lets Claude Desktop and Claude Code read and edit a room in the running Góc Nhà app.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "bin": {
+    "goc-nha-mcp": "./src/server.ts"
+  },
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "start": "node src/server.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.0",
+    "zod": "^4.6.5"
+  }
+}

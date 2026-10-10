@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment and local tool settings
+.env
+.claude/settings.local.json
+
+# Test output
+coverage
