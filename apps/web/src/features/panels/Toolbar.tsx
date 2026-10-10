@@ -22,7 +22,7 @@ function TimeLabel({ time }: { time: Exclude<TimeOfDay, 'off'> }) {
   const Icon = TIME_ICONS[time]
   return (
     <>
-      <Icon size={14} /> {PRESETS[time].label}
+      <Icon size={14} /> <span className="wide-only">{PRESETS[time].label}</span>
     </>
   )
 }
@@ -55,7 +55,12 @@ export function Toolbar() {
       </div>
       <div className="segmented light" title="Mô phỏng ánh sáng theo giờ trong ngày (theo hướng la bàn của phòng)">
         {(['off', 'morning', 'noon', 'afternoon', 'night'] as TimeOfDay[]).map((t) => (
-          <button key={t} className={lighting.time === t ? 'on' : ''} onClick={() => useStore.getState().setLighting({ time: t })}>
+          <button
+            key={t}
+            className={lighting.time === t ? 'on' : ''}
+            onClick={() => useStore.getState().setLighting({ time: t })}
+            title={t === 'off' ? undefined : PRESETS[t].label}
+          >
             {t === 'off' ? 'Không nắng' : <TimeLabel time={t} />}
           </button>
         ))}
@@ -65,7 +70,7 @@ export function Toolbar() {
         onClick={() => useStore.getState().setLighting({ lightsOn: !lighting.lightsOn })}
         title="Bật/tắt đèn trong phòng"
       >
-        {lighting.lightsOn ? <Lightbulb size={16} /> : <LightbulbOff size={16} />} {lighting.lightsOn ? 'Đèn bật' : 'Đèn tắt'}
+        {lighting.lightsOn ? <Lightbulb size={16} /> : <LightbulbOff size={16} />} <span className="wide-only">{lighting.lightsOn ? 'Đèn bật' : 'Đèn tắt'}</span>
       </button>
       <div className="tool-group">
         <button onClick={undo} disabled={!canUndo} title="Hoàn tác (Ctrl+Z)">
@@ -75,8 +80,8 @@ export function Toolbar() {
           <Redo2 size={16} />
         </button>
         {view === '2d' && (
-          <button onClick={() => useViewport.getState().requestFit()} title="Vừa màn hình">
-            <Maximize2 size={16} /> Vừa khung
+          <button onClick={() => useViewport.getState().requestFit()} title="Vừa màn hình" aria-label="Vừa khung">
+            <Maximize2 size={16} /> <span className="wide-only">Vừa khung</span>
           </button>
         )}
       </div>

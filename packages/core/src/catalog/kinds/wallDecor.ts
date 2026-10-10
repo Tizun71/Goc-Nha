@@ -125,9 +125,10 @@ function buildWallMirror(it: WallItem): Box[] {
   return [
     b(0, 0, z, it.w, 1.5, body, frame),
     { x: it.w / 2, y: 0.75, z: z + body, w: it.w, d: 1.5, h: arch * 2, color: frame, cylinder: 'y' },
-    b(1.5, 1.5, z + 1.5, it.w - 3, 0.4, body - 1.5, glass, { plain: true }),
-    { x: it.w / 2, y: 1.7, z: z + body, w: it.w - 3, d: 0.4, h: arch * 2 - 3, color: glass, cylinder: 'y', plain: true },
-    b(it.w * 0.2, 2, z + it.h * 0.25, it.w * 0.06, 0.2, it.h * 0.45, '#ffffff', { plain: true, opacity: 0.6 }),
+    // glass sits clear of the frame's front face, or the hidden half of the arch outline shows through
+    b(1.5, 2, z + 1.5, it.w - 3, 0.4, body - 1.5, glass, { plain: true }),
+    { x: it.w / 2, y: 2.2, z: z + body, w: it.w - 3, d: 0.4, h: arch * 2 - 3, color: glass, cylinder: 'y', plain: true },
+    b(it.w * 0.2, 2.4, z + it.h * 0.25, it.w * 0.06, 0.2, it.h * 0.45, '#ffffff', { plain: true, opacity: 0.6 }),
   ]
 }
 

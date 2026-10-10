@@ -21,6 +21,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Furniture rendering: the desk shows its laptop and mug in 3D too, the lounge chair has one reclined back instead of steps, the pillow cushion is a cushion instead of a disc, the Persian rug's corner pieces stay inside the rug, and the arched mirror no longer shows a dashed line across the glass.
+- The toolbar fits on one line on laptop screens: below 1600 px the time-of-day, lamp and fit buttons show only their icons.
+- Long problems in the "Cần xem lại" list wrap instead of running out of the panel.
+
 - The tight-passage check no longer flags a chair tucked in at a desk or table.
 - A broken or hand-edited save no longer crashes the app on start. Invalid items are dropped, duplicate ids are removed, and a broken room falls back to the default room. Opened files and share links get the same checks.
 

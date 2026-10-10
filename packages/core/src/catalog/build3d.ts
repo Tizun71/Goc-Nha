@@ -18,6 +18,8 @@ export type Box = {
   h: number
   color: string
   tilt?: number
+  /** Rotation around the local x axis (degrees); positive leans the top towards the back (-y). Not combined with `turn`. */
+  lean?: number
   opacity?: number
   cylinder?: 'z' | 'y'
   taper?: number
@@ -57,13 +59,26 @@ export function buildDesk(it: FloorItem): Box[] {
   const top = 3
   const leg = Math.min(5, it.w / 6, it.d / 6)
   const lh = it.h - top
-  return [
+  const boxes = [
     b(0, 0, lh, it.w, it.d, top, c),
     b(2, 2, 0, leg, leg, lh, '#8b6b4a'),
     b(it.w - 2 - leg, 2, 0, leg, leg, lh, '#8b6b4a'),
     b(2, it.d - 2 - leg, 0, leg, leg, lh, '#8b6b4a'),
     b(it.w - 2 - leg, it.d - 2 - leg, 0, leg, leg, lh, '#8b6b4a'),
   ]
+  // the laptop and mug from the plan drawing
+  if (it.w >= 60 && it.d >= 40) {
+    const lw = Math.min(34, it.w * 0.4)
+    const lx = (it.w - lw) / 2
+    const ly = it.d * 0.25
+    boxes.push(
+      b(lx, ly, it.h, lw, lw * 0.65, 1.2, '#cfd4da'),
+      b(lx, ly - 1, it.h, lw, 1, lw * 0.6, '#cfd4da'),
+      b(lx + 2, ly, it.h + 2, lw - 4, 0.3, lw * 0.6 - 4, '#9aa4ae', { plain: true }),
+      { x: it.w - 12, y: it.d * 0.3, z: it.h + 4.5, w: 8, d: 8, h: 9, color: '#ffffff', cylinder: 'z' },
+    )
+  }
+  return boxes
 }
 
 export function buildBookshelf(it: FloorItem): Box[] {

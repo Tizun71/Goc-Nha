@@ -29,7 +29,7 @@ function frontWallsFor(dx: number, dz: number): FrontWalls {
 
 /** Rotation, scale and geometry for a box, cylinder or ellipsoid (round shapes are unit-sized and scaled). */
 function shapeOf(b: Box) {
-  const rotation: [number, number, number] = [b.cylinder === 'y' ? Math.PI / 2 : 0, b.turn ? -b.turn * DEG : 0, b.tilt ? b.tilt * DEG : 0]
+  const rotation: [number, number, number] = [(b.cylinder === 'y' ? Math.PI / 2 : 0) - (b.lean ?? 0) * DEG, b.turn ? -b.turn * DEG : 0, b.tilt ? b.tilt * DEG : 0]
   const scale: [number, number, number] = b.cylinder === 'y' ? [b.w, b.d, b.h] : b.cylinder || b.ellipsoid ? [b.w, b.h, b.d] : [1, 1, 1]
   const geometry = b.ellipsoid ? (
     <sphereGeometry args={[0.5, 32, 24]} />
