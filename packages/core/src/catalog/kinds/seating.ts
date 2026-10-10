@@ -53,16 +53,32 @@ function buildLoungeChair(it: FloorItem): Box[] {
   const color = it.color ?? '#5c4033'
   const leather = '#2b2522'
   const seat = Math.min(38, it.h * 0.45)
+  // one reclined back panel: its foot sits at the back of the seat, its top reaches the full height
+  const lean = 15
+  const sin = Math.sin(lean * Math.PI / 180)
+  const cos = Math.cos(lean * Math.PI / 180)
+  const foot = seat - 4
+  const len = (it.h - foot) / cos
+  const t = 10
+  const footY = Math.max(it.d * 0.4, len * sin + t + 1)
+  const panel = (inset: number, depth: number, front: number, c: string): Box => ({
+    x: it.w / 2,
+    y: footY - front - depth / 2 - (len / 2) * sin,
+    z: foot + (len / 2) * cos,
+    w: it.w * (0.8 - 2 * inset),
+    d: depth,
+    h: len - 4 * inset * 10,
+    color: c,
+    lean,
+  })
   return [
     b(it.w / 2 - 3, it.d / 2 - 3, 0, 6, 6, seat - 10, '#444'),
     b(it.w * 0.2, it.d * 0.3, 0, it.w * 0.6, it.d * 0.4, 3, '#444'),
     b(it.w * 0.1, it.d * 0.4, seat - 10, it.w * 0.8, it.d * 0.55, 6, color),
     b(it.w * 0.15, it.d * 0.42, seat - 4, it.w * 0.7, it.d * 0.5, 9, leather),
-    // reclined back built from three steps leaning back
-    b(it.w * 0.1, it.d * 0.22, seat - 4, it.w * 0.8, 10, 22, color),
-    b(it.w * 0.1, it.d * 0.12, seat + 14, it.w * 0.8, 10, 20, color),
-    b(it.w * 0.1, it.d * 0.03, seat + 30, it.w * 0.8, 10, it.h - seat - 30, color),
-    b(it.w * 0.15, it.d * 0.06, seat + 4, it.w * 0.7, 6, it.h - seat - 6, leather),
+    panel(0, t, 0, color),
+    // leather cushion on the front of the back panel
+    panel(0.05, 4, -3, leather),
     b(0, it.d * 0.3, seat - 6, it.w * 0.12, it.d * 0.45, 14, color),
     b(it.w * 0.88, it.d * 0.3, seat - 6, it.w * 0.12, it.d * 0.45, 14, color),
   ]

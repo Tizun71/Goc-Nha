@@ -512,8 +512,17 @@ kbd {
   font-weight: 400;
   color: var(--muted);
 }
-@media (max-width: 960px) {
+@media (max-width: 1700px) {
   .tagline {
+    display: none;
+  }
+}
+/* below this width the toolbar no longer fits on one line with every label shown */
+@media (max-width: 1600px) {
+  .toolbar {
+    gap: 10px;
+  }
+  .toolbar .wide-only {
     display: none;
   }
 }
@@ -651,6 +660,7 @@ kbd {
   align-items: flex-start;
   gap: 2px;
   text-align: left;
+  white-space: normal;
   padding: 6px 10px;
   background: #fef2f2;
   border: 1px solid #fecaca;

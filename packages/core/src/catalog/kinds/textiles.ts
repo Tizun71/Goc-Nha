@@ -74,7 +74,7 @@ function drawDuvet(c: C, it: FloorItem, px: number) {
 
 function buildDuvet(it: FloorItem): Box[] {
   const color = it.color ?? '#a7b8c9'
-  return [b(0, 16, 0, it.w, it.d - 16, it.h, color), b(0, 0, 0, it.w, 16, it.h * 1.3, '#f7f4ec')]
+  return [b(0, 16, 0, it.w, it.d - 16, it.h, color), b(0, 0, 0, it.w, 16, it.h * 1.3, '#e9e1d0')]
 }
 
 // ---------- Pillow cushion ----------
@@ -88,7 +88,13 @@ function drawPillowCushion(c: C, it: FloorItem, px: number) {
 }
 
 function buildPillowCushion(it: FloorItem): Box[] {
-  return [blob(it.w / 2, it.d / 2, it.h / 2, it.w, it.d, it.h, it.color ?? '#d9a441')]
+  const color = it.color ?? '#d9a441'
+  // a square core under a puffy top reads as a cushion, not a disc
+  return [
+    b(it.w * 0.06, it.d * 0.06, 0, it.w * 0.88, it.d * 0.88, it.h * 0.55, color),
+    blob(it.w / 2, it.d / 2, it.h * 0.5, it.w, it.d, it.h, shade(color, 0.08)),
+    blob(it.w / 2, it.d / 2, it.h - 0.5, 3, 3, 2, shade(color, -0.3), { plain: true }),
+  ]
 }
 
 // ---------- Floor cushion: a round tufted pouf to sit on ----------
@@ -186,13 +192,19 @@ function drawPersianRug(c: C, it: FloorItem, px: number) {
   ell(c, mx, my, r * 1.1, r * 1.4, navy, px, gold)
   ell(c, mx, my, r * 0.6, r * 0.8, gold, px, null)
   ell(c, mx, my, r * 0.25, r * 0.35, field, px, null)
+  // corner pieces: quarter circles kept inside the field, not over the border
+  c.save()
+  c.beginPath()
+  c.rect(m, m, w - 2 * m, d - 2 * m)
+  c.clip()
   for (const [x, y] of [
     [m, m],
     [w - m, m],
     [m, d - m],
     [w - m, d - m],
   ])
-    ell(c, x, y, r * 0.6, r * 0.6, navy, px, gold)
+    ell(c, x, y, r * 0.5, r * 0.5, navy, px, gold)
+  c.restore()
 }
 
 function buildPersianRug(it: FloorItem): Box[] {
