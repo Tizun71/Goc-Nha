@@ -1,0 +1,33 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Set the room to 300 × 400 cm
+        2. Add a wardrobe
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: room
+    attributes:
+      label: Room file
+      description: If you can, attach the exported JSON (Lưu JSON) or a screenshot.
+  - type: input
+    id: env
+    attributes:
+      label: Browser and device
+      placeholder: Chrome 140 on Windows 11, Safari on iPhone 15
+    validations:
+      required: true

@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest an idea or a new furniture item
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does it solve?
+      description: Describe the situation, for example "I cannot plan an L-shaped room".
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: What you would like to happen. For a furniture item, give typical sizes in cm.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
