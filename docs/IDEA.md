@@ -4,7 +4,7 @@
 
 Góc Nhà ("a corner of home") is a browser-based room planner. You enter your room's real size in centimetres, place furniture at its real size, and check the layout in 2D and in an isometric 3D view, with daylight for any time of day. Claude can also act as a co-designer: it reads and edits the room live through MCP.
 
-For setup, the feature list and the code structure, see [README.md](README.md). This document covers why the product exists and where it could go.
+For setup, the feature list and the code structure, see [README.md](../README.md). This document covers why the product exists and where it could go.
 
 ## Problem
 

@@ -1,84 +1,82 @@
-<img src="public/brand-logo.png" alt="Góc Nhà" width="160" />
+<p align="center">
+  <img src="apps/web/public/brand-logo.png" alt="Góc Nhà" width="160" />
+</p>
 
-# Góc Nhà
+<h1 align="center">Góc Nhà</h1>
 
-*Xếp phòng trước khi mua đồ.* Enter your room's length and width, place furniture drawn in code at its real size (in centimetres), and check the layout in 2D or in an isometric 3D view, with daylight for any time of day.
+<p align="center">
+  <em>Xếp phòng trước khi mua đồ.</em> Plan your room before you buy furniture.
+</p>
 
-The name means "a corner of home": the cosy spot you are planning, before you buy a single piece of furniture.
+<p align="center">
+  <a href="https://github.com/Tizun71/Goc-Nha/actions/workflows/ci.yml"><img src="https://github.com/Tizun71/Goc-Nha/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0--or--later-blue.svg" alt="License: AGPL-3.0-or-later" /></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome" /></a>
+</p>
 
-## Getting started
-
-```bash
-pnpm install
-pnpm dev      # http://localhost:5173
-pnpm test     # unit tests (vitest)
-pnpm build    # type check + production build
-```
+Góc Nhà ("a corner of home") is a browser-based room planner. Enter your room's length and width in centimetres, place furniture at its real size, and check the layout in 2D or in an isometric 3D view, with daylight for any time of day. Claude can join as a co-designer through the built-in [MCP](https://modelcontextprotocol.io) server.
 
 ## Features
 
-- Room length, width and height in cm, with a 10/50/100 cm grid.
-- About 90 items in 12 catalog sections, with accent-insensitive search (Vietnamese or English names):
-  - Beds: standard, platform, canopy, upholstered, storage, tatami, daybed.
-  - Storage: wardrobe, armoire, chest of drawers, nightstand, bookshelf, fishbone bookshelf, open shelving, cabinet, floating shelf, safe, laundry basket, wall hook.
-  - Tables: desk, writing desk, console, coffee, side and dining tables. Seating: chair, accent, lounge, rocking and reading chairs, bean bag.
-  - Lighting: ceiling light, pendant, floor lamp, table lamp, candle holder, wall sconce, LED strip, string lights, fluorescent tube.
-  - Textiles (throw and knitted blankets, duvet, cushions) and rugs (area, shag, jute, Persian, layered).
-  - Plants and pots: monstera, fiddle leaf fig, snake plant, pothos, olive tree, bonsai, pampas grass, ceramic and terracotta pots, plant stand, hanging planter.
-  - Wall decor: wall art, gallery wall, framed poster, canvas art, mirrors, wood panelling, floating frame, wall clock.
-  - Lifestyle corners: book stack, coffee station and cart, espresso machine, mug shelf, record player, vinyl shelf, speaker, projector.
-  - Doors, windows and curtains; air conditioner, fans and power outlets.
-- Items sit on layers: rugs lie under furniture, decor (lamps, plants, blankets, cushions, small appliances) stands on whatever solid item is below it, and ceiling lights and hanging planters hang from the ceiling. Only solid furniture is checked for overlaps.
-- Every item is drawn procedurally from its size, so details reflow when you resize it (for example, wardrobe doors are added as it gets wider, and a bed gets two pillows at 120 cm and wider).
-- Resize with the handles or type exact sizes, rotate (with snapping to 90°), duplicate and delete.
-- Snapping to walls and to the edges of other items, with live distances to the walls.
-- Warnings for overlapping items, items outside the room and furniture that blocks a door's swing.
-- Undo/redo, auto-save to localStorage, JSON export/import and PNG export.
-- Compass: set which way the room faces (8 directions or exact degrees). The plan shows a compass rose and the direction of each wall, and the properties panel shows where a door, window or bed faces.
-- Daylight simulation: pick morning, noon, afternoon or night. The sun's direction follows the room's compass (typical sun path for Vietnam). The plan shows sun patches through each window and a sun/moon marker; at night the room goes dark and the lamps light it. The isometric view casts real shadows, and sunlight only enters through windows. Lamps (ceiling light, table/wall lamps, LED strips, fluorescent tubes) can be switched on at any time.
-- Isometric 3D preview (three.js) built from the same data, viewable from all four corners.
+- **Real sizes.** The room and every item are in centimetres, on a 10/50/100 cm grid.
+- **About 90 procedural items** in 12 catalog sections: beds, storage, tables, seating, lighting, textiles, rugs, plants, wall decor, lifestyle corners, doors and windows, appliances. Each item is drawn from its size, so details reflow when you resize it.
+- **Layers.** Rugs lie under furniture, decor stands on what is below it, and ceiling lights hang from the ceiling. Only solid furniture is checked for overlaps.
+- **Layout checks.** Snapping to walls and other items, live distances to the walls, and warnings for overlaps, items outside the room and furniture in a door's swing.
+- **Compass and daylight.** Set which way the room faces. The sun follows a typical Vietnamese sun path and enters only through windows. At night the lamps light the room.
+- **Isometric 3D** (three.js) from the same data, viewable from all four corners, with real shadows.
+- **Mobile layout** with a bottom sheet and touch quick actions.
+- **Undo/redo, auto-save**, JSON import/export and PNG export.
+- **AI co-designer.** Claude Desktop or Claude Code can read and edit the room live. Each batch of AI changes is one undo step.
 
-## Structure
+## Quick start
 
-```
-src/
-  model/      types and zustand store (undo/redo, persistence)
-  furniture/  catalog, 2D drawing functions, 3D box builders
-  editor/     Konva canvas, nodes, snapping and collision
-  iso/        isometric preview
-  ui/         toolbar and side panels
-  lib/        geometry, units, import/export
+You need Node.js 22.6 or newer and [pnpm](https://pnpm.io) 10.
+
+```bash
+git clone https://github.com/Tizun71/Goc-Nha.git
+cd Goc-Nha
+pnpm install
+pnpm dev        # http://localhost:5173
 ```
 
-To add a furniture type, add its kind to `model/types.ts`, then write its definition (2D drawing, 3D boxes, sizes, category and layer) in the matching file under `furniture/kinds/` and spread it into `furniture/catalog.ts`. `src/__tests__/catalog.test.ts` checks every item draws and builds at its default, minimum and maximum sizes.
+| Command          | What it does                                       |
+| ---------------- | -------------------------------------------------- |
+| `pnpm dev`       | Start the web app with the AI hub                  |
+| `pnpm test`      | Run the unit tests (Vitest)                        |
+| `pnpm lint`      | Lint with oxlint                                   |
+| `pnpm typecheck` | Type check every package                           |
+| `pnpm build`     | Type check and build the web app to `apps/web/dist` |
+| `pnpm mcp`       | Start the MCP server by hand (clients usually do this) |
 
-## Let Claude edit the room (MCP)
+## Repository layout
 
-The app ships an MCP server so Claude Desktop and Claude Code can read and change the room live. Every change goes through the app's store, so you see it happen and can undo it with Ctrl+Z (a batch of AI changes is one undo step).
+This is a pnpm monorepo.
+
+| Path                                         | Package               | Contents                                                                                    |
+| -------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------- |
+| [`packages/core`](packages/core)             | `@goc-nha/core`       | Framework-free model, geometry, compass and sun, collision and snapping, furniture catalog, room-editing ops. All unit tests live here. |
+| [`packages/mcp-server`](packages/mcp-server) | `@goc-nha/mcp-server` | The stdio MCP server that Claude clients start.                                             |
+| [`apps/web`](apps/web)                       | `@goc-nha/web`        | React app: Konva 2D editor, three.js isometric view, panels, store, AI bridge, dev hub.     |
+| [`docs`](docs)                               |                       | [Architecture](docs/architecture.md), [MCP setup](docs/mcp.md), [adding furniture](docs/adding-furniture.md), [product idea](docs/IDEA.md). |
+
+## Let Claude edit the room
 
 ```
-Claude Desktop / Claude Code ──stdio──> mcp/server.ts ──WebSocket──> hub in the Vite dev server (/__dmr) ──> app in the browser
+Claude Desktop / Claude Code ──stdio──> mcp-server ──WebSocket──> hub in the Vite dev server ──> app in the browser
 ```
 
-1. Run `pnpm dev` and open http://localhost:5173. The toolbar shows "AI đã kết nối" once a Claude client is attached.
-2. Connect a client:
-   - **Claude Code**: the project's `.mcp.json` registers the server. Start `claude` in this folder and approve `design-my-room` (the server's registration key; it shows up as Góc Nhà).
-   - **Claude Desktop**: add this to `%APPDATA%\Claude\claude_desktop_config.json` (Microsoft Store install: `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude\claude_desktop_config.json`; macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`) and restart Claude Desktop:
+Run `pnpm dev` and open the app. In this folder, Claude Code picks up the server from `.mcp.json`. For Claude Desktop and the list of tools, see [docs/mcp.md](docs/mcp.md).
 
-     ```json
-     {
-       "mcpServers": {
-         "design-my-room": {
-           "command": "node",
-           "args": ["D:/Workspace/Start up/design-my-room/mcp/server.ts"]
-         }
-       }
-     }
-     ```
+## Contributing
 
-Both clients can be connected at the same time. The server needs Node 22.6 or newer (it runs the TypeScript file directly). Set `DMR_APP_URL` if the app runs somewhere other than http://localhost:5173.
+Bug reports, ideas and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Everyone in the project follows the [Code of Conduct](CODE_OF_CONDUCT.md). To report a security problem, see [SECURITY.md](SECURITY.md).
 
-Tools: `get_room`, `list_catalog`, `check_layout`, `snapshot` (PNG of the 2D plan or the isometric view), `set_lighting` (time of day, lamps on/off), `set_room`, `add_item`, `update_item`, `remove_item`, `apply_changes`, `undo`, `redo`. Items can be positioned with `place`: against a wall (`wall`), relative to another item (`next_to`, e.g. a chair in front of a desk facing it) or on any free spot (`free`).
+## License
 
-The editing logic lives in `src/ai/ops.ts` (pure functions, unit tested); `src/ai/bridge.ts` runs requests in the browser and `mcp/hub.ts` relays messages.
-"# Goc-Nha" 
+Copyright (C) 2026 Tizun71
+
+Góc Nhà is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+If you run a modified version of Góc Nhà as a network service, you must offer its users the source code of your version (AGPL-3.0, section 13).
