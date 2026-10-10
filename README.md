@@ -57,7 +57,7 @@ This is a pnpm monorepo.
 | [`packages/core`](packages/core)             | `@goc-nha/core`       | Framework-free model, geometry, compass and sun, collision and snapping, furniture catalog, room-editing ops. All unit tests live here. |
 | [`packages/mcp-server`](packages/mcp-server) | `@goc-nha/mcp-server` | The stdio MCP server that Claude clients start.                                             |
 | [`apps/web`](apps/web)                       | `@goc-nha/web`        | React app: Konva 2D editor, three.js isometric view, panels, store, AI bridge, dev hub.     |
-| [`docs`](docs)                               |                       | [Architecture](docs/architecture.md), [MCP setup](docs/mcp.md), [adding furniture](docs/adding-furniture.md), [product idea](docs/IDEA.md). |
+| [`docs`](docs)                               |                       | [Architecture](docs/architecture.md), [MCP setup](docs/mcp.md), [adding furniture](docs/adding-furniture.md), [visual design](docs/design.md), [product idea](docs/IDEA.md). |
 
 ## Let Claude edit the room
 
