@@ -29,3 +29,6 @@ dist-ssr
 
 # Test output
 coverage
+
+# Vercel CLI link
+.vercel
