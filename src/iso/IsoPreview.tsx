@@ -10,6 +10,7 @@ import { FLOOR_COLOR } from '../furniture/draw2d'
 import { layerOf, supportOf } from '../model/layers'
 import { PRESETS, sunPlanDirection, type LightPreset } from '../lib/sun'
 import { roomLights } from '../lib/lights'
+import { TOUCH_QUERY, useMediaQuery } from '../lib/useMedia'
 import { WALL_THICKNESS as T, wallFrame, wallLocalToRoom } from '../lib/geometry'
 
 // Room coordinates (x, y) on the floor map to three.js (x, z); three's y is up.
@@ -301,6 +302,7 @@ export function IsoPreview() {
   const camPos: [number, number, number] = [center[0] + dist, center[1] + dist * 0.82, center[2] + dist]
   const controls = useRef<ComponentRef<typeof OrbitControls>>(null)
   const [front, setFront] = useState<FrontWalls>(() => frontWallsFor(1, 1))
+  const touch = useMediaQuery(TOUCH_QUERY)
 
   const updateFront = () => {
     const c = controls.current
@@ -345,7 +347,9 @@ export function IsoPreview() {
           ⟳ Xoay 90°
         </button>
       </div>
-      <div className="iso-hint">Kéo để xoay · cuộn để zoom · chuột phải để di chuyển</div>
+      <div className="iso-hint">
+        {touch ? 'Kéo để xoay · chụm để zoom · hai ngón để di chuyển' : 'Kéo để xoay · cuộn để zoom · chuột phải để di chuyển'}
+      </div>
     </div>
   )
 }

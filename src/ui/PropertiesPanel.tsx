@@ -6,6 +6,7 @@ import { findIssues } from '../editor/collision'
 import { wallFrame } from '../lib/geometry'
 import { backBearing, directionName, frontBearing, northOf, wallBearing } from '../lib/compass'
 import { NumberField } from './NumberField'
+import { TOUCH_QUERY, useMediaQuery } from '../lib/useMedia'
 
 const WALL_LABELS: Record<Wall, string> = { top: 'Trên', right: 'Phải', bottom: 'Dưới', left: 'Trái' }
 
@@ -15,6 +16,7 @@ export function PropertiesPanel() {
   const item = useStore((s) => s.items.find((it) => it.id === s.selectedId) ?? null)
   const { updateItem, removeItem, duplicateItem, rotateItem } = useStore.getState()
   const issues = useMemo(() => findIssues(items, room), [items, room])
+  const touch = useMediaQuery(TOUCH_QUERY)
 
   if (!item) {
     const total = issues.size
@@ -25,15 +27,28 @@ export function PropertiesPanel() {
         <p className="hint">
           {items.length} món đồ{total > 0 && <strong className="warn"> · {total} món có vấn đề</strong>}
         </p>
-        <h3>Phím tắt</h3>
-        <ul className="shortcuts">
-          <li><kbd>R</kbd> xoay 90°</li>
-          <li><kbd>Del</kbd> xoá</li>
-          <li><kbd>Ctrl</kbd>+<kbd>D</kbd> nhân bản</li>
-          <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> hoàn tác / làm lại</li>
-          <li><kbd>←↑→↓</kbd> dịch 1 cm (<kbd>Shift</kbd> 10 cm)</li>
-          <li>Cuộn chuột để zoom, kéo nền để di chuyển</li>
-        </ul>
+        {touch ? (
+          <>
+            <h3>Thao tác</h3>
+            <ul className="shortcuts">
+              <li>Chạm món đồ để chọn, kéo để di chuyển</li>
+              <li>Kéo nền bằng một ngón để di chuyển</li>
+              <li>Chụm/mở hai ngón để zoom</li>
+            </ul>
+          </>
+        ) : (
+          <>
+            <h3>Phím tắt</h3>
+            <ul className="shortcuts">
+              <li><kbd>R</kbd> xoay 90°</li>
+              <li><kbd>Del</kbd> xoá</li>
+              <li><kbd>Ctrl</kbd>+<kbd>D</kbd> nhân bản</li>
+              <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> hoàn tác / làm lại</li>
+              <li><kbd>←↑→↓</kbd> dịch 1 cm (<kbd>Shift</kbd> 10 cm)</li>
+              <li>Cuộn chuột để zoom, kéo nền để di chuyển</li>
+            </ul>
+          </>
+        )}
       </section>
     )
   }

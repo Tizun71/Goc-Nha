@@ -36,7 +36,7 @@ export type FloorKind =
 export type WallKind =
   | 'door' | 'window' | 'curtain' | 'wallHook' | 'airConditioner' | 'wallLamp' | 'ledStrip' | 'fluorescentLamp'
   | 'powerOutlet' | 'wallPainting' | 'wallFan'
-  | 'floatingShelf' | 'stringLights' | 'mugShelf'
+  | 'floatingShelf' | 'ropeShelf' | 'stringLights' | 'mugShelf'
   | 'galleryWall' | 'framedPoster' | 'canvasArt' | 'wallMirror' | 'fullLengthMirror' | 'woodPanel' | 'floatingFrame' | 'wallClock'
 export type Kind = FloorKind | WallKind
 

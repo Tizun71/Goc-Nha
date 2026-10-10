@@ -1,4 +1,4 @@
-import type Konva from 'konva'
+import Konva from 'konva'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Layer, Stage, Transformer } from 'react-konva'
 import { useStore } from '../model/store'
@@ -14,8 +14,14 @@ import { Lighting2D } from './Lighting2D'
 import { LAYER_ORDER, layerOf } from '../model/layers'
 import type { FloorItem } from '../model/types'
 import { stageHandle, useViewport } from './viewport'
+import { TOUCH_QUERY, useMediaQuery } from '../lib/useMedia'
 
 export const DRAG_MIME = 'application/x-dmr-kind'
+
+const MIN_ZOOM = 0.2
+const MAX_ZOOM = 20
+// keep touchmove events flowing while the stage is being dragged, so a second finger can start a pinch
+Konva.hitOnDragEnabled = true
 
 export function RoomCanvas() {
   const room = useStore((s) => s.room)
@@ -28,6 +34,8 @@ export function RoomCanvas() {
   const stageRef = useRef<Konva.Stage>(null)
   const trRef = useRef<Konva.Transformer>(null)
   const [size, setSize] = useState({ w: 800, h: 600 })
+  const pinch = useRef<{ dist: number; cx: number; cy: number } | null>(null)
+  const touch = useMediaQuery(TOUCH_QUERY)
 
   const issues = useMemo(() => findIssues(items, room), [items, room])
   const selected = items.find((it) => it.id === selectedId) ?? null
@@ -48,9 +56,9 @@ export function RoomCanvas() {
 
   // Fit the room on screen when it changes size, the window resizes, or the user asks.
   useEffect(() => {
-    const margin = 70
+    const margin = 70 // room for the wall labels and the compass outside the top-right corner
     const z = Math.min((size.w - 2 * margin) / (room.length + 2 * T), (size.h - 2 * margin) / (room.width + 2 * T))
-    const zoom = Math.max(0.2, z)
+    const zoom = Math.max(MIN_ZOOM, z)
     set({ zoom, x: (size.w - room.length * zoom) / 2, y: (size.h - room.width * zoom) / 2 })
   }, [room.length, room.width, size.w, size.h, fitNonce, set])
 
@@ -69,9 +77,29 @@ export function RoomCanvas() {
     const stage = stageRef.current!
     const pointer = stage.getPointerPosition()!
     const factor = e.evt.deltaY > 0 ? 1 / 1.1 : 1.1
-    const next = Math.min(20, Math.max(0.2, zoom * factor))
+    const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom * factor))
     const cm = { x: (pointer.x - x) / zoom, y: (pointer.y - y) / zoom }
     set({ zoom: next, x: pointer.x - cm.x * next, y: pointer.y - cm.y * next })
+  }
+
+  // Two-finger pinch: zoom around the midpoint and pan with it.
+  const onTouchMove = (e: Konva.KonvaEventObject<TouchEvent>) => {
+    const t = e.evt.touches
+    if (t.length !== 2) return
+    e.evt.preventDefault()
+    const stage = stageRef.current!
+    if (stage.isDragging()) stage.stopDrag()
+    const rect = stage.container().getBoundingClientRect()
+    const cx = (t[0].clientX + t[1].clientX) / 2 - rect.left
+    const cy = (t[0].clientY + t[1].clientY) / 2 - rect.top
+    const dist = Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY)
+    const prev = pinch.current
+    pinch.current = { dist, cx, cy }
+    if (!prev || prev.dist === 0) return
+    const vp = useViewport.getState()
+    const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, vp.zoom * (dist / prev.dist)))
+    const cm = { x: (prev.cx - vp.x) / vp.zoom, y: (prev.cy - vp.y) / vp.zoom }
+    set({ zoom: next, x: cx - cm.x * next, y: cy - cm.y * next })
   }
 
   const onDrop = (e: React.DragEvent) => {
@@ -118,7 +146,11 @@ export function RoomCanvas() {
           if (e.target === e.target.getStage()) useStore.getState().select(null)
         }}
         onTouchStart={(e) => {
-          if (e.target === e.target.getStage()) useStore.getState().select(null)
+          if (e.evt.touches.length === 1 && e.target === e.target.getStage()) useStore.getState().select(null)
+        }}
+        onTouchMove={onTouchMove}
+        onTouchEnd={(e) => {
+          if (e.evt.touches.length < 2) pinch.current = null
         }}
         onDragEnd={(e) => {
           if (e.target === e.target.getStage()) set({ x: e.target.x(), y: e.target.y() })
@@ -153,7 +185,7 @@ export function RoomCanvas() {
                 ? ['middle-left', 'middle-right']
                 : ['top-left', 'top-center', 'top-right', 'middle-left', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right']
             }
-            anchorSize={9}
+            anchorSize={touch ? 18 : 9}
             anchorCornerRadius={2}
             borderStroke="#2563eb"
             anchorStroke="#2563eb"

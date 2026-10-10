@@ -26,7 +26,7 @@ function loadOpen(): Partial<Record<Category, boolean>> {
   }
 }
 
-function CatalogItem({ kind }: { kind: Kind }) {
+function CatalogItem({ kind, onPick }: { kind: Kind; onPick?: () => void }) {
   const def = defOf(kind)
   return (
     <button
@@ -36,7 +36,10 @@ function CatalogItem({ kind }: { kind: Kind }) {
         e.dataTransfer.setData(DRAG_MIME, kind)
         e.dataTransfer.effectAllowed = 'copy'
       }}
-      onClick={() => useStore.getState().addItem(kind)}
+      onClick={() => {
+        useStore.getState().addItem(kind)
+        onPick?.()
+      }}
       title={`${def.label} (${def.en}) · bấm để thêm, hoặc kéo vào phòng`}
     >
       <Thumbnail kind={kind} />
@@ -49,7 +52,8 @@ function CatalogItem({ kind }: { kind: Kind }) {
   )
 }
 
-export function CatalogPanel() {
+/** onPick runs after an item is added by tapping, e.g. to close the mobile sheet. */
+export function CatalogPanel({ onPick }: { onPick?: () => void } = {}) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState<Partial<Record<Category, boolean>>>(() => ({ bed: true, ...loadOpen() }))
 
@@ -92,14 +96,14 @@ export function CatalogPanel() {
             {expanded && (
               <div className="catalog-grid">
                 {g.kinds.map((k) => (
-                  <CatalogItem key={k} kind={k} />
+                  <CatalogItem key={k} kind={k} onPick={onPick} />
                 ))}
               </div>
             )}
           </div>
         )
       })}
-      <p className="hint">Bấm để thêm vào phòng hoặc kéo thả vào vị trí mong muốn.</p>
+      <p className="hint">{onPick ? 'Chạm để thêm vào phòng.' : 'Bấm để thêm vào phòng hoặc kéo thả vào vị trí mong muốn.'}</p>
     </section>
   )
 }

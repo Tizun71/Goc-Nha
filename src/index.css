@@ -282,6 +282,8 @@ kbd {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  /* the canvas handles pan and pinch itself; stop the browser scrolling or zooming the page */
+  touch-action: none;
 }
 .iso-hint {
   position: absolute;
@@ -294,25 +296,6 @@ kbd {
   padding: 4px 10px;
   border-radius: 999px;
   pointer-events: none;
-}
-
-@media (max-width: 960px) {
-  .app {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 60vh auto auto;
-    grid-template-areas: 'top' 'stage' 'right' 'left';
-    height: auto;
-  }
-  .sidebar.left,
-  .sidebar.right {
-    border: 0;
-  }
-  .catalog-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  }
-  .tool-group.right {
-    margin-left: 0;
-  }
 }
 
 .loading {
@@ -438,5 +421,124 @@ kbd {
 @media (max-width: 960px) {
   .tagline {
     display: none;
+  }
+}
+
+/* Mobile: canvas fills the screen, panels open in a bottom sheet from the tab bar. */
+.app.mobile {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 'top' 'stage' 'tabs';
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+.app.mobile .toolbar {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 8px 12px;
+  scrollbar-width: none;
+}
+.app.mobile .toolbar::-webkit-scrollbar {
+  display: none;
+}
+.app.mobile .toolbar > * {
+  flex-shrink: 0;
+}
+.app.mobile .toolbar h1 {
+  font-size: 15px;
+}
+/* keep view switch and undo/redo in reach before the scrolled-away extras */
+.app.mobile .tool-group:not(.right) {
+  order: 1;
+}
+.app.mobile .segmented.light,
+.app.mobile .lamp-toggle,
+.app.mobile .ai-status,
+.app.mobile .tool-group.right {
+  order: 2;
+}
+.app.mobile .tool-group.right {
+  margin-left: 0;
+}
+.tabbar {
+  grid-area: tabs;
+  display: flex;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tabbar button {
+  flex: 1;
+  border: 0;
+  border-radius: 0;
+  padding: 12px 4px;
+  font-size: 13px;
+  background: transparent;
+  color: var(--muted);
+}
+.tabbar button.on {
+  color: var(--accent);
+  font-weight: 600;
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+.sheet {
+  grid-area: stage;
+  align-self: end;
+  position: relative;
+  z-index: 5;
+  max-height: 60%;
+  overflow-y: auto;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.12);
+  overscroll-behavior: contain;
+}
+.sheet-close {
+  position: sticky;
+  top: 8px;
+  float: right;
+  margin: 8px 10px 0 0;
+  z-index: 1;
+  padding: 4px 10px;
+}
+.sheet .catalog-grid {
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
+.quick-actions {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  max-width: calc(100% - 24px);
+}
+.app.mobile .iso-hint {
+  bottom: 12px;
+  max-width: calc(100% - 24px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.app.mobile .iso-turn button {
+  padding: 6px 8px;
+}
+
+@media (pointer: coarse) {
+  button {
+    min-height: 36px;
+  }
+  /* 16px stops iOS Safari zooming the page when an input gets focus */
+  input,
+  select {
+    font-size: 16px;
   }
 }

@@ -202,6 +202,82 @@ function buildFloatingShelf(it: WallItem): Box[] {
   return boxes
 }
 
+// ---------- Rope shelf (wall): wooden planks hung on two ropes from one hook ----------
+
+const ROPE = '#d9c3a0'
+const ROPE_DEPTH = 20
+
+/** Plank heights (bottom of each plank, absolute) and the height of the rope V above the top plank. */
+function ropeShelfLayout(it: WallItem) {
+  const t = 2.5
+  const vH = Math.min(Math.max(it.w * 0.45, 15), it.h * 0.5)
+  const span = Math.max(0, it.h - vH - t)
+  const n = Math.max(2, Math.floor(span / 25) + 1)
+  const planks = Array.from({ length: n }, (_, i) => it.elevation + (span * i) / (n - 1))
+  return { t, vH, planks }
+}
+
+function drawRopeShelf(c: C, it: WallItem, px: number) {
+  const { w } = it
+  const color = it.color ?? '#c49a6c'
+  const rand = seededRandom(it.id)
+  box(c, 0, 0, w, ROPE_DEPTH, color, px, 1)
+  // rope through each end of the plank, and the hook on the wall
+  for (const x of [3, w - 3]) dot(c, x, ROPE_DEPTH / 2, 1.6, ROPE)
+  line(c, w / 2, 0, w / 2, ROPE_DEPTH / 2, px, 1.5, '#3b2f2a')
+  // what sits on the top plank
+  ell(c, w * 0.35, ROPE_DEPTH / 2, 4.5, 4.5, '#c46b43', px)
+  ell(c, w * 0.35, ROPE_DEPTH / 2, 6.5, 4, '#4fa35e', px)
+  let x = w * 0.55
+  for (let i = 0; i < 4 && x < w - 8; i++) {
+    c.fillStyle = pick(rand, BOOK_COLORS)
+    c.fillRect(x, 4, 2.4, 12)
+    x += 2.8
+  }
+}
+
+function buildRopeShelf(it: WallItem): Box[] {
+  const color = it.color ?? '#c49a6c'
+  const rand = seededRandom(it.id)
+  const { t, vH, planks } = ropeShelfLayout(it)
+  const y = ROPE_DEPTH / 2
+  const top = planks[planks.length - 1] + t
+  const hookZ = top + vH
+  const boxes: Box[] = []
+  // hook: a short arm out of the wall
+  boxes.push(b(it.w / 2 - 1, 0, hookZ - 1, 2, y + 1, 2, '#3b2f2a'))
+  for (const x of [3, it.w - 3]) {
+    // straight rope through all planks, with a loose tail under the bottom one
+    const z0 = planks[0] - 6
+    boxes.push({ x, y, z: (z0 + top) / 2, w: 1.2, d: 1.2, h: top - z0, color: ROPE, plain: true })
+    // rope up to the hook, as one side of the V
+    const dx = x - it.w / 2
+    const len = Math.hypot(dx, vH)
+    boxes.push({ x: (x + it.w / 2) / 2, y, z: (top + hookZ) / 2, w: 1.2, d: 1.2, h: len, color: ROPE, plain: true, tilt: (Math.atan2(dx, vH) * 180) / Math.PI })
+    // knots holding each plank
+    for (const z of planks) boxes.push({ x, y, z: z - 1.2, w: 2.4, d: 2.4, h: 2.4, color: ROPE, ellipsoid: true, plain: true })
+  }
+  planks.forEach((z, i) => {
+    boxes.push(b(0, 0, z, it.w, ROPE_DEPTH, t, color))
+    const zTop = z + t
+    const room = i < planks.length - 1 ? planks[i + 1] - zTop : vH
+    if (room < 10 || it.w < 30) return
+    // a pot plant or a few books on each plank
+    if ((i + Math.floor(rand() * 2)) % 2 === 0) {
+      const potH = Math.min(9, room * 0.4)
+      boxes.push(cyl(it.w * 0.35, y, zTop, 9, 9, potH, '#c46b43', { taper: 0.8 }))
+      boxes.push({ x: it.w * 0.35, y, z: zTop + potH + Math.min(6, room * 0.25), w: 13, d: 11, h: Math.min(11, room * 0.45), color: '#4fa35e', ellipsoid: true })
+    } else {
+      let x = it.w * 0.2
+      for (let k = 0; k < 5 && x < it.w * 0.6; k++) {
+        boxes.push(b(x, 4, zTop, 2.4, 12, Math.min(room - 2, 14 + rand() * 5), pick(rand, BOOK_COLORS), { plain: true }))
+        x += 2.8
+      }
+    }
+  })
+  return boxes
+}
+
 export const STORAGE_DEFS = {
   armoire: {
     mount: 'floor',
@@ -266,5 +342,18 @@ export const STORAGE_WALL_DEFS = {
     depth: () => 22,
     draw2D: drawFloatingShelf,
     build3D: buildFloatingShelf,
+  },
+  ropeShelf: {
+    mount: 'wall',
+    label: 'Kệ dây thừng',
+    en: 'Rope shelf hanging',
+    category: 'storage',
+    color: '#c49a6c',
+    defaults: { w: 60, d: 0, h: 90, elevation: 100 },
+    min: { w: 30, d: 0, h: 40 },
+    max: { w: 150, d: 0, h: 200 },
+    depth: () => ROPE_DEPTH,
+    draw2D: drawRopeShelf,
+    build3D: buildRopeShelf,
   },
 } satisfies Record<string, WallDef>
