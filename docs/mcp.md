@@ -35,6 +35,7 @@ You can connect both clients at the same time. The server needs Node 22.6 or new
 | `get_room`      | Read the room size, wall directions, all items and layout problems |
 | `list_catalog`  | List the furniture kinds with their sizes                       |
 | `check_layout`  | Report overlaps, items outside the room, blocked doors, tight passages and floor coverage |
+| `shopping_list` | Items to buy with their real sizes, identical items counted together |
 | `snapshot`      | PNG of the 2D plan or the isometric view                        |
 | `set_lighting`  | Set the time of day and switch lamps on or off                  |
 | `set_room`      | Change the room size or compass direction                       |

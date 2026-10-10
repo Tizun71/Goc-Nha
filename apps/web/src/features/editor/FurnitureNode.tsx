@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type Konva from 'konva'
-import { Group, Rect, Shape } from 'react-konva'
+import { Group, Rect, Shape, Text } from 'react-konva'
 import type { FloorItem, Item, Room } from '@goc-nha/core/model'
 import { useStore } from '../../store/store'
 import { FLOOR_DEFS } from '@goc-nha/core/catalog'
 import { boundsOf, clampNum, floorCorners } from '@goc-nha/core/geometry'
-import { snapRect, snapTargets } from '@goc-nha/core/layout'
+import { FRONT_CLEARANCE, snapRect, snapTargets } from '@goc-nha/core/layout'
 import { useViewport } from './viewport'
 
 const SNAP_PX = 8
@@ -17,6 +17,8 @@ export function FurnitureNode({ item, room, others, zoom, hasIssue }: Props) {
   const def = FLOOR_DEFS[item.kind]
   const { updateItem, checkpoint, select } = useStore.getState()
   const px = 1 / zoom
+  const selected = useStore((s) => s.selectedId === item.id)
+  const clearance = FRONT_CLEARANCE[item.kind]
 
   const onDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
     const node = e.target
@@ -69,6 +71,28 @@ export function FurnitureNode({ item, room, others, zoom, hasIssue }: Props) {
       onTransformStart={checkpoint}
       onTransform={onTransform}
     >
+      {/* the free floor this item needs in front of it, shown while it is selected */}
+      {selected && clearance && (
+        <Group y={item.d} listening={false}>
+          <Rect
+            width={item.w}
+            height={clearance.cm}
+            fill="rgba(37,99,235,0.06)"
+            stroke="#2563eb"
+            strokeWidth={1.5 * px}
+            dash={[5 * px, 4 * px]}
+          />
+          <Text
+            width={item.w}
+            height={clearance.cm}
+            align="center"
+            verticalAlign="middle"
+            text={`${clearance.cm} cm để ${clearance.reason}`}
+            fontSize={11 * px}
+            fill="#2563eb"
+          />
+        </Group>
+      )}
       <Shape
         width={item.w}
         height={item.d}

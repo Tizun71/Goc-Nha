@@ -5,7 +5,7 @@ import { persist } from 'zustand/middleware'
 import type { Item, Kind, Room, RoomDoc, WallItem } from '@goc-nha/core/model'
 import { FLOOR_DEFS, WALL_DEFS, isWallKind } from '@goc-nha/core/catalog'
 import { clampWallItem, nearestWall, newId, type Vec } from '@goc-nha/core/geometry'
-import { migrateItems } from '@goc-nha/core/serialization'
+import { migrateItems, restoreDoc } from '@goc-nha/core/serialization'
 import { PRESETS, type TimeOfDay } from '@goc-nha/core/orientation'
 
 const HISTORY_LIMIT = 100
@@ -186,6 +186,16 @@ export const useStore = create<State & Actions>()(
       migrate: (persisted) => {
         const s = persisted as RoomDoc
         return { ...s, items: migrateItems(s.items ?? []) as Item[] }
+      },
+      // A save edited by hand or written by a buggy version must not crash the app:
+      // keep only valid items, and fall back to the default room if the room itself is broken.
+      merge: (persisted, current) => {
+        const p = persisted as Partial<State> | undefined
+        const doc = restoreDoc(p)
+        const time = p?.lighting?.time
+        const lighting =
+          time && (time === 'off' || time in PRESETS) ? { time, lightsOn: p?.lighting?.lightsOn === true } : current.lighting
+        return doc ? { ...current, ...doc, lighting } : current
       },
     },
   ),

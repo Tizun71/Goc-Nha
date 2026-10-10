@@ -41,6 +41,14 @@ button {
   cursor: pointer;
   white-space: nowrap;
 }
+/* lucide icons sit on the text baseline next to their label */
+svg.lucide {
+  flex: none;
+  vertical-align: -0.15em;
+}
+kbd svg.lucide {
+  vertical-align: -0.1em;
+}
 button:hover:not(:disabled) {
   border-color: #cbbfae;
   background: #fbf8f3;
@@ -289,6 +297,63 @@ kbd {
   min-width: 0;
   min-height: 0;
 }
+/* over the empty room; only the card takes clicks, so the canvas still pans and zooms */
+.empty-state {
+  position: absolute;
+  inset: auto 0 24px;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none;
+  z-index: 5;
+}
+.empty-card {
+  pointer-events: auto;
+  max-width: 520px;
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(59, 47, 42, 0.12);
+  padding: 16px 18px;
+  text-align: center;
+}
+.empty-art {
+  line-height: 1;
+  color: var(--accent);
+}
+.empty-card h2 {
+  margin: 6px 0 4px;
+  font-size: 16px;
+}
+.empty-card p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.empty-templates {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+.empty-templates button {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--bg);
+}
+.empty-templates button span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.empty-catalog {
+  margin-top: 10px;
+  width: 100%;
+}
+
 .canvas-wrap {
   position: absolute;
   inset: 0;
@@ -355,6 +420,23 @@ kbd {
   text-align: center;
 }
 
+/* fixed, so the toolbar does not reflow when it shows */
+.share-note {
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  max-width: 90%;
+  text-align: center;
+}
+
 .iso-turn {
   position: absolute;
   top: 12px;
@@ -408,7 +490,8 @@ kbd {
   color: var(--accent);
 }
 .catalog-head .chev {
-  width: 12px;
+  display: inline-flex;
+  width: 14px;
   color: var(--muted);
 }
 .catalog-head em {
@@ -552,4 +635,77 @@ kbd {
   select {
     font-size: 16px;
   }
+}
+
+.issue-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: grid;
+  gap: 6px;
+}
+.issue-list button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  padding: 6px 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: var(--ink);
+  font-size: 12px;
+}
+.issue-list button span {
+  color: var(--danger);
+}
+
+.shopping-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.shopping-head button.small {
+  font-size: 11px;
+  padding: 3px 8px;
+}
+.shopping {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+.shopping li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+}
+.shopping .door-warning {
+  flex-basis: 100%;
+  padding-left: 20px;
+  color: #b45309;
+  font-size: 11px;
+}
+.shopping .swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+.shopping .name {
+  flex: 1;
+  min-width: 0;
+}
+/* numbers stay precise and aligned (docs/design.md) */
+.shopping .size {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }

@@ -2,3 +2,4 @@
 
 export * from './collision'
 export * from './snapping'
+export * from './clearance'

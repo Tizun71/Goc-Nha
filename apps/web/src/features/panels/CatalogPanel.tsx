@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { useMemo, useState } from 'react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import type { Kind } from '@goc-nha/core/model'
 import { useStore } from '../../store/store'
 import { CATEGORIES, FLOOR_DEFS, WALL_DEFS, defOf, type Category } from '@goc-nha/core/catalog'
@@ -91,7 +92,7 @@ export function CatalogPanel({ onPick }: { onPick?: () => void } = {}) {
         return (
           <div key={g.id} className="catalog-group">
             <button className="catalog-head" onClick={() => toggle(g.id)} aria-expanded={expanded}>
-              <span className="chev">{expanded ? '▾' : '▸'}</span>
+              <span className="chev">{expanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</span>
               {g.label}
               <em>{g.kinds.length}</em>
             </button>

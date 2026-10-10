@@ -62,8 +62,8 @@ In progress:
 
 These are ideas, not commitments.
 
-- **Share a room** with a link, so a partner, landlord or friend can see the plan.
-- **Templates and presets:** typical room sizes and starter layouts (student room, studio, bedroom with a work corner).
+- **Share a room** with a link (done: the room is encoded in the link). Next: a read-only view and comments.
+- **Templates and presets:** starter layouts (done: student room, bedroom with a work corner, studio). Next: more sizes and styles.
 - **Non-rectangular rooms:** L-shapes, columns, alcoves and sloped ceilings.
 - **Real products:** link catalog items to real products with their real sizes, photos and prices.
 - **Budget:** a running total of the items in the plan.

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import { RotateCcw, RotateCw } from 'lucide-react'
 import { Edges, OrbitControls, OrthographicCamera } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react'
@@ -345,10 +346,10 @@ export function IsoPreview() {
       </Canvas>
       <div className="iso-turn">
         <button onClick={() => turn(-90)} title="Xoay góc nhìn 90° ngược chiều kim đồng hồ">
-          ⟲ Xoay 90°
+          <RotateCcw size={16} /> Xoay 90°
         </button>
         <button onClick={() => turn(90)} title="Xoay góc nhìn 90° theo chiều kim đồng hồ">
-          ⟳ Xoay 90°
+          <RotateCw size={16} /> Xoay 90°
         </button>
       </div>
       <div className="iso-hint">

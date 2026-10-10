@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { Bot, Lightbulb, LightbulbOff, Link2, Maximize2, Moon, Redo2, Sun, Sunrise, Sunset, Undo2 } from 'lucide-react'
 import { useStore } from '../../store/store'
 import { useViewport } from '../editor/viewport'
 import { renderPlanDataUrl } from '../editor/exportImage'
@@ -8,10 +9,22 @@ import { useBridge } from '../../ai/bridge'
 import { PRESETS, type TimeOfDay } from '@goc-nha/core/orientation'
 import { parseDoc } from '@goc-nha/core/serialization'
 import { exportJson, exportPng } from '../../lib/download'
+import { shareRoom } from '../../app/useShareLink'
 
 function savePng() {
   const url = renderPlanDataUrl(2)
   if (url) exportPng(url)
+}
+
+const TIME_ICONS = { morning: Sunrise, noon: Sun, afternoon: Sunset, night: Moon }
+
+function TimeLabel({ time }: { time: Exclude<TimeOfDay, 'off'> }) {
+  const Icon = TIME_ICONS[time]
+  return (
+    <>
+      <Icon size={14} /> {PRESETS[time].label}
+    </>
+  )
 }
 
 const SOURCE_URL = 'https://github.com/Tizun71/Goc-Nha'
@@ -24,6 +37,7 @@ export function Toolbar() {
   const { setView, undo, redo, loadDoc, clearItems } = useStore.getState()
   const fileRef = useRef<HTMLInputElement>(null)
   const ai = useBridge()
+  const [shareNote, setShareNote] = useState('')
 
   return (
     <header className="toolbar">
@@ -42,7 +56,7 @@ export function Toolbar() {
       <div className="segmented light" title="Mô phỏng ánh sáng theo giờ trong ngày (theo hướng la bàn của phòng)">
         {(['off', 'morning', 'noon', 'afternoon', 'night'] as TimeOfDay[]).map((t) => (
           <button key={t} className={lighting.time === t ? 'on' : ''} onClick={() => useStore.getState().setLighting({ time: t })}>
-            {t === 'off' ? 'Không nắng' : `${t === 'night' ? '🌙' : '☀'} ${PRESETS[t].label}`}
+            {t === 'off' ? 'Không nắng' : <TimeLabel time={t} />}
           </button>
         ))}
       </div>
@@ -51,18 +65,18 @@ export function Toolbar() {
         onClick={() => useStore.getState().setLighting({ lightsOn: !lighting.lightsOn })}
         title="Bật/tắt đèn trong phòng"
       >
-        💡 {lighting.lightsOn ? 'Đèn bật' : 'Đèn tắt'}
+        {lighting.lightsOn ? <Lightbulb size={16} /> : <LightbulbOff size={16} />} {lighting.lightsOn ? 'Đèn bật' : 'Đèn tắt'}
       </button>
       <div className="tool-group">
         <button onClick={undo} disabled={!canUndo} title="Hoàn tác (Ctrl+Z)">
-          ↶
+          <Undo2 size={16} />
         </button>
         <button onClick={redo} disabled={!canRedo} title="Làm lại (Ctrl+Y)">
-          ↷
+          <Redo2 size={16} />
         </button>
         {view === '2d' && (
           <button onClick={() => useViewport.getState().requestFit()} title="Vừa màn hình">
-            ⤢ Vừa khung
+            <Maximize2 size={16} /> Vừa khung
           </button>
         )}
       </div>
@@ -71,10 +85,26 @@ export function Toolbar() {
           className={`ai-status ${ai.connected && ai.agents > 0 ? 'on' : ''}`}
           title={ai.connected ? 'Claude kết nối qua MCP (Claude Desktop / Claude Code)' : 'Mất kết nối với dev server'}
         >
-          {ai.connected && ai.agents > 0 ? `🤖 AI đã kết nối${ai.agents > 1 ? ` (${ai.agents})` : ''}` : '🤖 AI chưa kết nối'}
+          <Bot size={16} /> {ai.connected && ai.agents > 0 ? `AI đã kết nối${ai.agents > 1 ? ` (${ai.agents})` : ''}` : 'AI chưa kết nối'}
         </span>
       )}
       <div className="tool-group right">
+        <button
+          title="Tạo link mở đúng phòng này, để gửi cho người thân, chủ nhà hoặc bạn bè"
+          onClick={async () => {
+            const note = await shareRoom()
+            if (!note) return
+            setShareNote(note)
+            setTimeout(() => setShareNote(''), 3000)
+          }}
+        >
+          <Link2 size={16} /> Chia sẻ
+        </button>
+        {shareNote && (
+          <span className="share-note" role="status">
+            {shareNote}
+          </span>
+        )}
         {view === '2d' && <button onClick={savePng}>Xuất PNG</button>}
         <button onClick={() => exportJson({ room: useStore.getState().room, items: useStore.getState().items })}>Lưu JSON</button>
         <button onClick={() => fileRef.current?.click()}>Mở JSON</button>

@@ -46,3 +46,23 @@ describe('collision', () => {
     expect(findIssues([{ ...door, opening: 'out' }, floor('chair', 90, 40, 40, 40)], room).size).toBe(0)
   })
 })
+
+describe('ceiling height', () => {
+  const low: Room = { length: 400, width: 300, height: 240 }
+  const tall = (id: string, kind: FloorItem['kind'], h: number, x = 100, y = 100): FloorItem => ({ id, mount: 'floor', kind, x, y, w: 80, d: 50, h, rotation: 0 })
+
+  it('flags furniture taller than the ceiling', () => {
+    expect(findIssues([tall('w', 'wardrobe', 250)], low).get('w')?.[0]).toContain('Cao hơn trần')
+    expect(findIssues([tall('w', 'wardrobe', 230)], low).has('w')).toBe(false)
+  })
+
+  it('adds the height of what decor stands on', () => {
+    const shelf = tall('s', 'bookshelf', 200)
+    expect(findIssues([shelf, tall('p', 'plant', 50)], low).get('p')?.[0]).toContain('250 cm')
+    expect(findIssues([tall('p', 'plant', 50)], low).has('p')).toBe(false)
+  })
+
+  it('ignores ceiling lights', () => {
+    expect(findIssues([tall('l', 'ceilingLight', 10)], low).has('l')).toBe(false)
+  })
+})
