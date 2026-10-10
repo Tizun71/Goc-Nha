@@ -331,6 +331,8 @@ export function checkLayout(doc: RoomDoc) {
   const MIN_PASSAGE = 60
   for (let i = 0; i < rects.length; i++)
     for (let j = i + 1; j < rects.length; j++) {
+      // a chair tucked in at a desk or table is not a walkway
+      if (isSeatAtTable(rects[i].it, rects[j].it)) continue
       const gap = rectGap(rects[i].r, rects[j].r)
       if (gap !== null && gap > 2 && gap < MIN_PASSAGE)
         passages.push({ between: [rects[i].it.id, rects[j].it.id], gapCm: Math.round(gap) })
@@ -347,6 +349,11 @@ export function checkLayout(doc: RoomDoc) {
     })),
     floorCoveredPercent: Math.round((Math.min(covered, total) / total) * 100),
   }
+}
+
+function isSeatAtTable(a: FloorItem, b: FloorItem) {
+  const cats = [defOf(a.kind).category, defOf(b.kind).category]
+  return cats.includes('seating') && cats.includes('table')
 }
 
 /** Gap between two rectangles that face each other along one axis, or null if they are diagonal or overlapping. */

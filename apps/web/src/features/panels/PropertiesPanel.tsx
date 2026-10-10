@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { useMemo } from 'react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Compass, RotateCw, TriangleAlert } from 'lucide-react'
 import { useStore } from '../../store/store'
 import type { Wall } from '@goc-nha/core/model'
 import { FLOOR_DEFS, WALL_DEFS, defOf } from '@goc-nha/core/catalog'
@@ -8,6 +9,8 @@ import { findIssues } from '@goc-nha/core/layout'
 import { wallFrame } from '@goc-nha/core/geometry'
 import { backBearing, directionName, frontBearing, northOf, wallBearing } from '@goc-nha/core/orientation'
 import { NumberField } from './NumberField'
+import { ShoppingList } from './ShoppingList'
+import { IssueList } from './IssueList'
 import { TOUCH_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
 
 const WALL_LABELS: Record<Wall, string> = { top: 'Trên', right: 'Phải', bottom: 'Dưới', left: 'Trái' }
@@ -29,6 +32,8 @@ export function PropertiesPanel() {
         <p className="hint">
           {items.length} món đồ{total > 0 && <strong className="warn"> · {total} món có vấn đề</strong>}
         </p>
+        <IssueList issues={issues} />
+        <ShoppingList />
         {touch ? (
           <>
             <h3>Thao tác</h3>
@@ -46,7 +51,12 @@ export function PropertiesPanel() {
               <li><kbd>Del</kbd> xoá</li>
               <li><kbd>Ctrl</kbd>+<kbd>D</kbd> nhân bản</li>
               <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> hoàn tác / làm lại</li>
-              <li><kbd>←↑→↓</kbd> dịch 1 cm (<kbd>Shift</kbd> 10 cm)</li>
+              <li><kbd>
+                  <ArrowLeft size={12} />
+                  <ArrowUp size={12} />
+                  <ArrowRight size={12} />
+                  <ArrowDown size={12} />
+                </kbd> dịch 1 cm (<kbd>Shift</kbd> 10 cm)</li>
               <li>Cuộn chuột để zoom, kéo nền để di chuyển</li>
             </ul>
           </>
@@ -76,11 +86,15 @@ export function PropertiesPanel() {
       {problems.length > 0 && (
         <div className="issues">
           {problems.map((p) => (
-            <div key={p}>⚠ {p}</div>
+            <div key={p}>
+              <TriangleAlert size={14} /> {p}
+            </div>
           ))}
         </div>
       )}
-      <div className="facing">🧭 {facing}</div>
+      <div className="facing">
+        <Compass size={14} /> {facing}
+      </div>
 
       {item.mount === 'floor' ? (
         <>
@@ -95,7 +109,7 @@ export function PropertiesPanel() {
           </div>
           <div className="field-row align-end">
             <NumberField label="Xoay" suffix="°" value={item.rotation} min={0} max={359} onCommit={(rotation) => set({ rotation })} />
-            <button onClick={() => rotateItem(item.id, 90)}>↻ 90°</button>
+            <button onClick={() => rotateItem(item.id, 90)}><RotateCw size={16} /> 90°</button>
           </div>
         </>
       ) : (

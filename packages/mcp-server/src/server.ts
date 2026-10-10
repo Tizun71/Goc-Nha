@@ -170,10 +170,20 @@ server.registerTool(
   'check_layout',
   {
     title: 'Check layout',
-    description: 'Overlaps, items outside the room, furniture blocking a door, tight passages and how much floor is covered.',
+    description: 'Overlaps, items outside the room or above the ceiling, furniture blocking a door, missing space in front of wardrobes, drawers and desks, tight passages and how much floor is covered.',
     annotations: { readOnlyHint: true },
   },
   () => tool('check_layout'),
+)
+
+server.registerTool(
+  'shopping_list',
+  {
+    title: 'Shopping list',
+    description: 'Items to buy with their real sizes in cm, identical items counted together, and a doorWarning for items that do not fit through any door in one piece. Doors, windows and outlets are left out.',
+    annotations: { readOnlyHint: true },
+  },
+  () => tool('shopping_list'),
 )
 
 server.registerTool(

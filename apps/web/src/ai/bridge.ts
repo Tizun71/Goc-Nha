@@ -11,7 +11,7 @@ import { stageHandle } from '../features/editor/viewport'
 import { renderPlanDataUrl } from '../features/editor/exportImage'
 import { PRESETS, windowSunPatch, type TimeOfDay } from '@goc-nha/core/orientation'
 import type { WallItem } from '@goc-nha/core/model'
-import { applyOps, catalog, checkLayout, describeItem, describeRoom, validateRoom, type Op } from '@goc-nha/core/ops'
+import { applyOps, catalog, checkLayout, describeItem, describeRoom, shoppingList, validateRoom, type Op } from '@goc-nha/core/ops'
 
 type BridgeState = {
   connected: boolean
@@ -107,6 +107,7 @@ const methods: Record<string, (p: Params) => unknown> = {
   get_room: () => roomState(),
   list_catalog: () => catalog(),
   check_layout: () => checkLayout(doc()),
+  shopping_list: () => shoppingList(doc()),
   set_room: (p) => {
     const room = validateRoom(useStore.getState().room, p as Partial<Room>)
     useStore.getState().commitDoc({ room, items: doc().items })

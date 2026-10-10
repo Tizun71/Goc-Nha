@@ -16,6 +16,10 @@ Every item is drawn in code from its size, in 2D (Canvas) and in 3D (boxes for t
 - `px` is the size of one screen pixel in centimetres. Use it for crisp line widths.
 - Use `seededRandom` from `geometry/random.ts` for variation, so that an item looks the same on every render.
 
+## Front clearance
+
+If the item needs free floor in front of it to be used (doors, drawers, a chair that slides back), add it to `FRONT_CLEARANCE` in `packages/core/src/layout/clearance.ts`. The layout check then warns when a wall or solid furniture other than seating stands in that zone.
+
 ## Layers
 
 - `solid`: furniture. The only layer that is checked for overlaps and door swings.

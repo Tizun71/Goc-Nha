@@ -2,7 +2,8 @@
 
 import type { FloorItem, Item, Room, WallItem } from '../model/types'
 import { doorSwingPolygon, floorCorners, type Vec } from '../geometry/geometry'
-import { isSolid } from '../model/layers'
+import { isSolid, layerOf, supportOf } from '../model/layers'
+import { clearanceProblem } from './clearance'
 
 const EPS = 0.5 // cm of overlap tolerated, so items placed flush are not flagged
 
@@ -40,7 +41,7 @@ export function isOutOfRoom(item: FloorItem, room: Room) {
 
 export type Issues = Map<string, string[]>
 
-/** Problems per item id: overlaps, items outside the room and blocked door swings. */
+/** Problems per item id: overlaps, items outside the room, items above the ceiling, blocked door swings and missing front clearance. */
 export function findIssues(items: Item[], room: Room): Issues {
   const issues: Issues = new Map()
   const add = (id: string, msg: string) => {
@@ -49,6 +50,13 @@ export function findIssues(items: Item[], room: Room): Issues {
     issues.set(id, list)
   }
   for (const it of items) if (it.mount === 'floor' && isOutOfRoom(it, room)) add(it.id, 'Nằm ngoài phòng')
+
+  // ceiling lights hang from the ceiling; decor stands on top of the item below it
+  for (const it of items) {
+    if (it.mount !== 'floor' || layerOf(it) === 'ceiling') continue
+    const top = (layerOf(it) === 'decor' ? (supportOf(it, items)?.h ?? 0) : 0) + it.h
+    if (top > room.height + EPS) add(it.id, `Cao hơn trần (${Math.round(top)} cm, trần ${room.height} cm)`)
+  }
 
   // rugs, decor and ceiling lights do not collide with furniture
   const floor = items.filter(isSolid)
@@ -70,6 +78,11 @@ export function findIssues(items: Item[], room: Room): Issues {
         add(door.id, 'Cửa mở bị vướng')
         add(it.id, 'Chắn đường mở cửa')
       }
+  }
+
+  for (const it of floor) {
+    const problem = clearanceProblem(it, floor, room, polygonsOverlap)
+    if (problem) add(it.id, problem)
   }
   return issues
 }

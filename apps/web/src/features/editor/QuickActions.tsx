@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import { RotateCw } from 'lucide-react'
 import { useStore } from '../../store/store'
 
 /** Touch replacement for the keyboard shortcuts, shown over the canvas while an item is selected. */
@@ -9,7 +10,7 @@ export function QuickActions({ onEdit }: { onEdit: () => void }) {
   const { rotateItem, duplicateItem, removeItem } = useStore.getState()
   return (
     <div className="quick-actions">
-      {item.mount === 'floor' && <button onClick={() => rotateItem(item.id, 90)}>↻ 90°</button>}
+      {item.mount === 'floor' && <button onClick={() => rotateItem(item.id, 90)}><RotateCw size={16} /> 90°</button>}
       <button onClick={() => duplicateItem(item.id)}>Nhân bản</button>
       <button onClick={onEdit}>Sửa</button>
       <button className="danger" onClick={() => removeItem(item.id)}>

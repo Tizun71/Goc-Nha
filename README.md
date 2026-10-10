@@ -21,11 +21,11 @@ Góc Nhà ("a corner of home") is a browser-based room planner. Enter your room'
 - **Real sizes.** The room and every item are in centimetres, on a 10/50/100 cm grid.
 - **About 90 procedural items** in 12 catalog sections: beds, storage, tables, seating, lighting, textiles, rugs, plants, wall decor, lifestyle corners, doors and windows, appliances. Each item is drawn from its size, so details reflow when you resize it.
 - **Layers.** Rugs lie under furniture, decor stands on what is below it, and ceiling lights hang from the ceiling. Only solid furniture is checked for overlaps.
-- **Layout checks.** Snapping to walls and other items, live distances to the walls, and warnings for overlaps, items outside the room and furniture in a door's swing.
+- **Layout checks.** Snapping to walls and other items, live distances to the walls, and warnings for overlaps, items outside the room and furniture in a door's swing, and missing space in front of wardrobes, drawers and desks.
 - **Compass and daylight.** Set which way the room faces. The sun follows a typical Vietnamese sun path and enters only through windows. At night the lamps light the room.
 - **Isometric 3D** (three.js) from the same data, viewable from all four corners, with real shadows.
 - **Mobile layout** with a bottom sheet and touch quick actions.
-- **Undo/redo, auto-save**, JSON import/export and PNG export.
+- **Undo/redo, auto-save**, JSON import/export, PNG export and share links that carry the whole room.
 - **AI co-designer.** Claude Desktop or Claude Code can read and edit the room live. Each batch of AI changes is one undo step.
 
 ## Quick start
