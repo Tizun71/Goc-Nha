@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { FloorItem } from '../../model/types'
 import type { FloorDef } from '../catalog'
 import { b, bedding2D, bedding3D, box, dot, legs4, line, shade, type Box } from './kit'

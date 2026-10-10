@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { describe, expect, it } from 'vitest'
 import { PRESETS, sunPlanDirection, windowSunPatch } from './sun'
 import type { Room, WallItem } from '../model/types'

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { Layer, Shape } from 'react-konva'
 import type { Item, Room, WallItem } from '@goc-nha/core/model'
 import { WALL_THICKNESS as T, wallLocalToRoom } from '@goc-nha/core/geometry'

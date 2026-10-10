@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { FloorItem, WallItem } from '../../model/types'
 import type { FloorDef, WallDef } from '../catalog'
 import { seededRandom } from '../../geometry/random'

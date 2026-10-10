@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import Konva from 'konva'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Layer, Stage, Transformer } from 'react-konva'

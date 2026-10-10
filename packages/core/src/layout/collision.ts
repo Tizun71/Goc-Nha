@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { FloorItem, Item, Room, WallItem } from '../model/types'
 import { doorSwingPolygon, floorCorners, type Vec } from '../geometry/geometry'
 import { isSolid } from '../model/layers'

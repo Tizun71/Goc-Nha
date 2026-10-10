@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 /** Deterministic PRNG seeded from a string, so procedural details stay stable across redraws. */
 export function seededRandom(seed: string) {
   let h = 1779033703 ^ seed.length

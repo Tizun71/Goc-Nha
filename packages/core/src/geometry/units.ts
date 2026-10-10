@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export function roundTo(value: number, step: number) {
   return Math.round(value / step) * step
 }

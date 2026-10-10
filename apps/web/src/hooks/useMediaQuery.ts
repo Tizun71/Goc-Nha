@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { useSyncExternalStore } from 'react'
 
 /** Phone and small tablet layout: canvas full screen, panels in a bottom sheet. */

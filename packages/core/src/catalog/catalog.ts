@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { FloorItem, FloorKind, Kind, WallItem, WallKind } from '../model/types'
 import * as d2 from './draw2d'
 import * as d3 from './build3d'

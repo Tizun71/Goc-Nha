@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { RoomDoc } from '../model/types'
 import { supportOf } from '../model/layers'
 import { wallLocalToRoom } from '../geometry/geometry'

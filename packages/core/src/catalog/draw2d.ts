@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Procedural top-down drawings. Each function draws in the item's local frame:
 // floor items fill (0,0)-(w,d) with the back edge at y=0 and the front at y=d;
 // wall items run along x in [0,w], the wall occupies y in [-T,0] and +y points into the room.

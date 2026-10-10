@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { useStore } from '../../store/store'
 
 /** Touch replacement for the keyboard shortcuts, shown over the canvas while an item is selected. */

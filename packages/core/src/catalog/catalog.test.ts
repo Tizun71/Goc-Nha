@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { describe, expect, it } from 'vitest'
 import { CATEGORIES, FLOOR_DEFS, WALL_DEFS } from './catalog'
 import type { FloorItem, WallItem } from '../model/types'

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Small drawing helpers shared by the furniture kinds in this folder.
 // 2D helpers draw in plan centimetres (px = one screen pixel); 3D helpers return Boxes (see build3d.ts).
 

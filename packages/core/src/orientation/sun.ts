@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Daylight presets and sun geometry. Sun positions are typical for Vietnam (about 16°N):
 // low in the east in the morning, high in the south at noon, low in the west in the afternoon.
 

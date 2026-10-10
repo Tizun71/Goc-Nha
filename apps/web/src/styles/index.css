@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 :root {
   --bg: #f7f4ee;
   --panel: #ffffff;
@@ -87,6 +89,15 @@ button.danger {
 }
 .tool-group.right {
   margin-left: auto;
+}
+.source-link {
+  align-self: center;
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.source-link:hover {
+  color: var(--ink);
 }
 .segmented {
   display: inline-flex;

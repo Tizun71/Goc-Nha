@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type Konva from 'konva'
 import { Group, Rect, Shape } from 'react-konva'
 import type { FloorItem, Item, Room } from '@goc-nha/core/model'

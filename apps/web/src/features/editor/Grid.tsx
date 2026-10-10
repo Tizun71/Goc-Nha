@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { Circle, Group, Line, Rect, Shape, Text } from 'react-konva'
 import type { Room, Wall } from '@goc-nha/core/model'
 import { FLOOR_COLOR } from '@goc-nha/core/catalog'

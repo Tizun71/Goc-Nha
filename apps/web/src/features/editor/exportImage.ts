@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { useStore } from '../../store/store'
 import { WALL_THICKNESS as T } from '@goc-nha/core/geometry'
 import { stageHandle } from './viewport'

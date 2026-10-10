@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { useRef } from 'react'
 import { useStore } from '../../store/store'
 import { useViewport } from '../editor/viewport'
@@ -11,6 +13,8 @@ function savePng() {
   const url = renderPlanDataUrl(2)
   if (url) exportPng(url)
 }
+
+const SOURCE_URL = 'https://github.com/Tizun71/Goc-Nha'
 
 export function Toolbar() {
   const view = useStore((s) => s.view)
@@ -82,6 +86,10 @@ export function Toolbar() {
         >
           Xoá hết
         </button>
+        {/* AGPL-3.0 §13: users of the hosted app can get its source */}
+        <a className="source-link" href={SOURCE_URL} target="_blank" rel="noopener noreferrer" title="Mã nguồn mở (AGPL-3.0)">
+          Mã nguồn
+        </a>
         <input
           ref={fileRef}
           type="file"

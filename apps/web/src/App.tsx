@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { Suspense, lazy, useState } from 'react'
 import { useStore } from './store/store'
 import { RoomCanvas } from './features/editor/RoomCanvas'

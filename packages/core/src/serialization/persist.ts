@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { Item, RoomDoc } from '../model/types'
 import { FLOOR_DEFS, WALL_DEFS } from '../catalog/catalog'
 

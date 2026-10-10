@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { Rect } from '../geometry/geometry'
 
 export type Guide = { axis: 'x' | 'y'; at: number }

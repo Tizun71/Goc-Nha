@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Wall decor. Wall items use local x along the wall (0..w), y into the room, and absolute heights in 3D.
 
 import type { WallItem } from '../../model/types'

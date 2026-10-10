@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { RoomDoc } from '@goc-nha/core/model'
 import { serializeDoc } from '@goc-nha/core/serialization'
 

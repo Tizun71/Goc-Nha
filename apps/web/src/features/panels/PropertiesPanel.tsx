@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { useMemo } from 'react'
 import { useStore } from '../../store/store'
 import type { Wall } from '@goc-nha/core/model'

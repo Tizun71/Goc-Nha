@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { FloorItem, Room, Wall, WallItem } from '../model/types'
 
 export type Vec = { x: number; y: number }

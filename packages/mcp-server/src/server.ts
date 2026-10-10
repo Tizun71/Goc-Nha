@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // MCP server for Góc Nhà. Claude Desktop / Claude Code start it over stdio; it forwards
 // each tool call to the open app through the hub in the Vite dev server (see apps/web/dev/ai-bridge-hub.ts).
 // Run directly with Node 22.6+ (TypeScript type stripping): node packages/mcp-server/src/server.ts

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { useEffect } from 'react'
 import { useStore } from '../store/store'
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Pure editing operations used by the AI bridge. They take a RoomDoc and return a new one,
 // so a whole batch of AI changes becomes a single undo step. No DOM or store access here.
 

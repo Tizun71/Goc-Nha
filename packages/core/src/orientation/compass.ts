@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { Room, Wall } from '../model/types'
 
 // Screen angles are degrees clockwise from "up" on the plan. Bearings are compass degrees (0 = north, 90 = east).

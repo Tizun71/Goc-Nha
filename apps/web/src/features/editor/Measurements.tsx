@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { Group, Label, Line, Tag, Text } from 'react-konva'
 import type { Item, Room } from '@goc-nha/core/model'
 import { boundsOf, floorCorners, wallFrame, wallLocalToRoom, type Vec } from '@goc-nha/core/geometry'

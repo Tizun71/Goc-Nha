@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { FloorItem, WallItem } from '../../model/types'
 import type { FloorDef, WallDef } from '../catalog'
 import { blob, ceilingOutline, cyl, dot, ell, lightPool, shade, type Box } from './kit'

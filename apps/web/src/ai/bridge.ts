@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Browser side of the AI bridge. Connects to the hub in the Vite dev server and runs
 // requests from MCP servers (Claude Desktop / Claude Code) against the live store.
 

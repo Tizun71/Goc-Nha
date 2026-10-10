@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { FloorItem, Item } from './types'
 import { floorCorners, type Vec } from '../geometry/geometry'
 import { FLOOR_DEFS, type Layer } from '../catalog/catalog'

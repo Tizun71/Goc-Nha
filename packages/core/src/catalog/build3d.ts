@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // 3D shapes for the iso preview, built from the same sizes as the 2D drawings.
 // Local frame: x along w, y along d (0 = back, d = front / into the room), z up.
 // Boxes are given by their centre; `tilt` rotates a box around the local y axis (degrees).

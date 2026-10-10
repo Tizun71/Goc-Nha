@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Vite dev-server plugin: a small WebSocket hub at /__dmr that links the browser app
 // (role=app) with any number of MCP servers (role=agent), e.g. one from Claude Desktop
 // and one from Claude Code at the same time.

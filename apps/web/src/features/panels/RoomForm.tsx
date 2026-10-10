@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { useStore } from '../../store/store'
 import { areaM2 } from '@goc-nha/core/geometry'
 import { DIRECTIONS, directionName, northForTopWall, northOf, wallBearing } from '@goc-nha/core/orientation'

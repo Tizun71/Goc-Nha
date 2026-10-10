@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // All lengths are centimetres. The room's x axis is its length, y axis its width.
 
 export type Room = {

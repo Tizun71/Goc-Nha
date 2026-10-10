@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type Konva from 'konva'
 import { create } from 'zustand'
 import type { Guide } from '@goc-nha/core/layout'
