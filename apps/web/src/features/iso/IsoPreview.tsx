@@ -282,13 +282,15 @@ function Lighting({ room, items, preset, lightsOn }: { room: Room; items: Item[]
 }
 
 function FitCamera({ room }: { room: Room }) {
-  const camera = useThree((s) => s.camera) as OrthoCam
+  // read the camera through get() so the effect mutates three.js state, not a hook value
+  const get = useThree((s) => s.get)
   const size = useThree((s) => s.size)
   useEffect(() => {
+    const camera = get().camera as OrthoCam
     const span = Math.hypot(room.length, room.width) + room.height
     camera.zoom = Math.min(size.width, size.height * 1.4) / (span * 1.15)
     camera.updateProjectionMatrix()
-  }, [camera, size, room])
+  }, [get, size, room])
   return null
 }
 
