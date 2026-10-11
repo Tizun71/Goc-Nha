@@ -6,7 +6,7 @@ import { Layer, Stage, Transformer } from 'react-konva'
 import { useStore } from '../../store/store'
 import type { Kind } from '@goc-nha/core/model'
 import { FLOOR_DEFS, WALL_DEFS } from '@goc-nha/core/catalog'
-import { WALL_THICKNESS as T } from '@goc-nha/core/geometry'
+import { WALL_THICKNESS as T, zoomAround } from '@goc-nha/core/geometry'
 import { RoomShell } from './Grid'
 import { FurnitureNode } from './FurnitureNode'
 import { WallItemNode } from './WallItemNode'
@@ -20,8 +20,8 @@ import { TOUCH_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
 
 export const DRAG_MIME = 'application/x-dmr-kind'
 
-const MIN_ZOOM = 0.2
-const MAX_ZOOM = 20
+export const MIN_ZOOM = 0.2
+export const MAX_ZOOM = 20
 // keep touchmove events flowing while the stage is being dragged, so a second finger can start a pinch
 Konva.hitOnDragEnabled = true
 
@@ -30,7 +30,7 @@ export function RoomCanvas() {
   const items = useStore((s) => s.items)
   const selectedId = useStore((s) => s.selectedId)
   const lighting = useStore((s) => s.lighting)
-  const { zoom, x, y, guides, fitNonce, set } = useViewport()
+  const { zoom, x, y, guides, fitNonce, insetBottom, set } = useViewport()
 
   const wrapRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<Konva.Stage>(null)
@@ -59,10 +59,12 @@ export function RoomCanvas() {
   // Fit the room on screen when it changes size, the window resizes, or the user asks.
   useEffect(() => {
     const margin = 70 // room for the wall labels and the compass outside the top-right corner
-    const z = Math.min((size.w - 2 * margin) / (room.length + 2 * T), (size.h - 2 * margin) / (room.width + 2 * T))
+    // fit above a card floating over the bottom of the canvas, unless that leaves too little room
+    const h = size.h - insetBottom > 4 * margin ? size.h - insetBottom : size.h
+    const z = Math.min((size.w - 2 * margin) / (room.length + 2 * T), (h - 2 * margin) / (room.width + 2 * T))
     const zoom = Math.max(MIN_ZOOM, z)
-    set({ zoom, x: (size.w - room.length * zoom) / 2, y: (size.h - room.width * zoom) / 2 })
-  }, [room.length, room.width, size.w, size.h, fitNonce, set])
+    set({ zoom, x: (size.w - room.length * zoom) / 2, y: (h - room.width * zoom) / 2 })
+  }, [room.length, room.width, size.w, size.h, insetBottom, fitNonce, set])
 
   // Attach the transformer to the selected item.
   useEffect(() => {
@@ -79,9 +81,7 @@ export function RoomCanvas() {
     const stage = stageRef.current!
     const pointer = stage.getPointerPosition()!
     const factor = e.evt.deltaY > 0 ? 1 / 1.1 : 1.1
-    const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom * factor))
-    const cm = { x: (pointer.x - x) / zoom, y: (pointer.y - y) / zoom }
-    set({ zoom: next, x: pointer.x - cm.x * next, y: pointer.y - cm.y * next })
+    set(zoomAround({ zoom, x, y }, factor, pointer, MIN_ZOOM, MAX_ZOOM))
   }
 
   // Two-finger pinch: zoom around the midpoint and pan with it.
@@ -99,9 +99,9 @@ export function RoomCanvas() {
     pinch.current = { dist, cx, cy }
     if (!prev || prev.dist === 0) return
     const vp = useViewport.getState()
-    const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, vp.zoom * (dist / prev.dist)))
-    const cm = { x: (prev.cx - vp.x) / vp.zoom, y: (prev.cy - vp.y) / vp.zoom }
-    set({ zoom: next, x: cx - cm.x * next, y: cy - cm.y * next })
+    // zoom around the old midpoint, then follow the fingers to the new one
+    const next = zoomAround(vp, dist / prev.dist, { x: prev.cx, y: prev.cy }, MIN_ZOOM, MAX_ZOOM)
+    set({ zoom: next.zoom, x: next.x + cx - prev.cx, y: next.y + cy - prev.cy })
   }
 
   const onDrop = (e: React.DragEvent) => {

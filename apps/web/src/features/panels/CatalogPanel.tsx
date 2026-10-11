@@ -83,9 +83,17 @@ export function CatalogPanel({ onPick }: { onPick?: () => void } = {}) {
 
   const searching = query.trim() !== ''
   return (
-    <section className="panel catalog">
-      <h2>Nội thất</h2>
-      <input className="catalog-search" type="search" placeholder="Tìm: giường, đèn, monstera…" value={query} onChange={(e) => setQuery(e.target.value)} />
+    <section className="catalog">
+      <div className="catalog-search-wrap">
+        <input
+          className="catalog-search"
+          type="search"
+          aria-label="Tìm nội thất"
+          placeholder="Tìm: giường, đèn, monstera…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
       {groups.length === 0 && <p className="hint">Không tìm thấy món nào.</p>}
       {groups.map((g) => {
         const expanded = searching || open[g.id]
