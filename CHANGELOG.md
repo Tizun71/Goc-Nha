@@ -18,6 +18,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - An empty room now shows a card to start from a starter room or the catalog.
 - Ceiling check: furniture taller than the room, or decor that reaches above the ceiling on top of the item below it, is flagged.
 - A "Cần xem lại" list in the properties panel shows every layout problem; click one to select that item.
+- Zoom buttons (zoom out, zoom in, fit) in the corner of the 2D plan.
+- Both sidebars can be collapsed to give the plan more room; the app remembers the choice.
+- Number fields show an error while the value is out of range, before it is corrected.
+
+### Changed
+
+- Calmer, canvas-first editor layout. The toolbar is grouped into view, light and history, with "Chia sẻ" as the one main action and file actions (save/open JSON, clear room, source code) in a "⋯" menu.
+- The left sidebar has two tabs: "Nội thất" for the furniture library and "Phòng" for size, direction and starter rooms.
+- With nothing selected, the right panel shows a room overview (size, area, direction, item count, problems, shopping list). Keyboard shortcuts moved to a help button in the toolbar.
+- The empty room card is smaller, sits under the room, and has a button that opens the furniture library.
+- New colour, spacing and focus tokens, with visible keyboard focus on every control (see `docs/design.md`).
 
 ### Fixed
 

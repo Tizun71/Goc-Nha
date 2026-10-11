@@ -1,17 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { useMemo } from 'react'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Compass, RotateCw, TriangleAlert } from 'lucide-react'
+import { Compass, Copy, RotateCw, Trash2, TriangleAlert } from 'lucide-react'
 import { useStore } from '../../store/store'
 import type { Wall } from '@goc-nha/core/model'
-import { FLOOR_DEFS, WALL_DEFS, defOf } from '@goc-nha/core/catalog'
+import { CATEGORIES, FLOOR_DEFS, WALL_DEFS, defOf } from '@goc-nha/core/catalog'
 import { findIssues } from '@goc-nha/core/layout'
 import { wallFrame } from '@goc-nha/core/geometry'
 import { backBearing, directionName, frontBearing, northOf, wallBearing } from '@goc-nha/core/orientation'
 import { NumberField } from './NumberField'
-import { ShoppingList } from './ShoppingList'
-import { IssueList } from './IssueList'
-import { TOUCH_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
+import { RoomOverview } from './RoomOverview'
 
 const WALL_LABELS: Record<Wall, string> = { top: 'Trên', right: 'Phải', bottom: 'Dưới', left: 'Trái' }
 
@@ -21,46 +19,11 @@ export function PropertiesPanel() {
   const item = useStore((s) => s.items.find((it) => it.id === s.selectedId) ?? null)
   const { updateItem, removeItem, duplicateItem, rotateItem } = useStore.getState()
   const issues = useMemo(() => findIssues(items, room), [items, room])
-  const touch = useMediaQuery(TOUCH_QUERY)
 
   if (!item) {
-    const total = issues.size
     return (
-      <section className="panel">
-        <h2>Thuộc tính</h2>
-        <p className="hint">Chọn một món đồ để chỉnh kích thước.</p>
-        <p className="hint">
-          {items.length} món đồ{total > 0 && <strong className="warn"> · {total} món có vấn đề</strong>}
-        </p>
-        <IssueList issues={issues} />
-        <ShoppingList />
-        {touch ? (
-          <>
-            <h3>Thao tác</h3>
-            <ul className="shortcuts">
-              <li>Chạm món đồ để chọn, kéo để di chuyển</li>
-              <li>Kéo nền bằng một ngón để di chuyển</li>
-              <li>Chụm/mở hai ngón để zoom</li>
-            </ul>
-          </>
-        ) : (
-          <>
-            <h3>Phím tắt</h3>
-            <ul className="shortcuts">
-              <li><kbd>R</kbd> xoay 90°</li>
-              <li><kbd>Del</kbd> xoá</li>
-              <li><kbd>Ctrl</kbd>+<kbd>D</kbd> nhân bản</li>
-              <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> hoàn tác / làm lại</li>
-              <li><kbd>
-                  <ArrowLeft size={12} />
-                  <ArrowUp size={12} />
-                  <ArrowRight size={12} />
-                  <ArrowDown size={12} />
-                </kbd> dịch 1 cm (<kbd>Shift</kbd> 10 cm)</li>
-              <li>Cuộn chuột để zoom, kéo nền để di chuyển</li>
-            </ul>
-          </>
-        )}
+      <section className="inspector">
+        <RoomOverview issues={issues} />
       </section>
     )
   }
@@ -81,8 +44,13 @@ export function PropertiesPanel() {
           : `Trên tường hướng ${directionName(wallBearing(item.wall, north))}`
 
   return (
-    <section className="panel">
-      <h2>{def.label}</h2>
+    <section className="inspector">
+      <header className="inspector-head">
+        <h2>{def.label}</h2>
+        <p className="hint">
+          {CATEGORIES.find((c) => c.id === def.category)?.label} · {def.en}
+        </p>
+      </header>
       {problems.length > 0 && (
         <div className="issues">
           {problems.map((p) => (
@@ -98,22 +66,27 @@ export function PropertiesPanel() {
 
       {item.mount === 'floor' ? (
         <>
+          <h3>Kích thước</h3>
           <div className="field-row">
             <NumberField label="Dài" value={item.w} min={FLOOR_DEFS[item.kind].min.w} max={FLOOR_DEFS[item.kind].max.w} onCommit={(w) => set({ w })} />
             <NumberField label="Rộng (sâu)" value={item.d} min={FLOOR_DEFS[item.kind].min.d} max={FLOOR_DEFS[item.kind].max.d} onCommit={(d) => set({ d })} />
           </div>
           <NumberField label="Cao" value={item.h} min={FLOOR_DEFS[item.kind].min.h} max={FLOOR_DEFS[item.kind].max.h} onCommit={(h) => set({ h })} />
+          <h3>Vị trí và góc xoay</h3>
           <div className="field-row">
             <NumberField label="Tâm X" value={item.x} onCommit={(x) => set({ x })} />
             <NumberField label="Tâm Y" value={item.y} onCommit={(y) => set({ y })} />
           </div>
           <div className="field-row align-end">
             <NumberField label="Xoay" suffix="°" value={item.rotation} min={0} max={359} onCommit={(rotation) => set({ rotation })} />
-            <button onClick={() => rotateItem(item.id, 90)}><RotateCw size={16} /> 90°</button>
+            <button onClick={() => rotateItem(item.id, 90)} title="Xoay 90° (R)">
+              <RotateCw size={16} /> 90°
+            </button>
           </div>
         </>
       ) : (
         <>
+          <h3>Vị trí trên tường</h3>
           <label className="field">
             <span>Tường</span>
             <select value={item.wall} onChange={(e) => set({ wall: e.target.value as Wall })}>
@@ -163,7 +136,7 @@ export function PropertiesPanel() {
 
       {item.kind !== 'window' && (
         <label className="field">
-          <span>Màu</span>
+          <span>Màu sắc</span>
           <div className="color-row">
             <input type="color" value={item.color ?? def.color} onChange={(e) => updateItem(item.id, { color: e.target.value })} />
             {item.color && <button onClick={() => set({ color: undefined })}>Mặc định</button>}
@@ -172,9 +145,11 @@ export function PropertiesPanel() {
       )}
 
       <div className="actions">
-        <button onClick={() => duplicateItem(item.id)}>Nhân bản</button>
-        <button className="danger" onClick={() => removeItem(item.id)}>
-          Xoá
+        <button onClick={() => duplicateItem(item.id)} title="Nhân bản (Ctrl+D)">
+          <Copy size={16} /> Nhân bản
+        </button>
+        <button className="danger" onClick={() => removeItem(item.id)} title="Xoá (Del)">
+          <Trash2 size={16} /> Xoá
         </button>
       </div>
     </section>

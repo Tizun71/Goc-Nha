@@ -11,6 +11,8 @@ type Viewport = {
   guides: Guide[]
   dragging: boolean
   fitNonce: number
+  /** Screen pixels at the bottom of the canvas covered by a floating card; fitting keeps the room above it. */
+  insetBottom: number
   set: (patch: Partial<Omit<Viewport, 'set' | 'requestFit'>>) => void
   requestFit: () => void
 }
@@ -22,6 +24,7 @@ export const useViewport = create<Viewport>()((set) => ({
   guides: [],
   dragging: false,
   fitNonce: 0,
+  insetBottom: 0,
   set: (patch) => set(patch),
   requestFit: () => set((s) => ({ fitNonce: s.fitNonce + 1 })),
 }))

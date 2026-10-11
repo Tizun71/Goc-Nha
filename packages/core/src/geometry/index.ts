@@ -3,3 +3,4 @@
 export * from './geometry'
 export * from './units'
 export * from './random'
+export * from './zoom'

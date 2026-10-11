@@ -22,43 +22,31 @@ The app icon (`apps/web/public/icon-512.png`) is the reference: an isometric cor
 
 ## Colour
 
-### Current tokens
+The app shell (toolbar, panels, menus) is a quiet design tool: warm paper canvas, near-white panels, one calm accent used on purpose. The charm lives in the room and the furniture, not in the chrome around it.
 
-Defined in `apps/web/src/styles/index.css` and `packages/core/src/catalog/draw2d.ts`:
+Tokens live in `apps/web/src/styles/index.css` (UI) and `packages/core/src/catalog/draw2d.ts` (drawing):
 
-| Token          | Value     | Use                         |
-| -------------- | --------- | --------------------------- |
-| `--bg`         | `#f7f4ee` | App background (cream)      |
-| `--panel`      | `#ffffff` | Panels                      |
-| `--ink`        | `#2b2420` | Text                        |
-| `--muted`      | `#7a6f66` | Secondary text              |
-| `--line`       | `#e7e0d6` | Borders                     |
-| `--accent`     | `#2563eb` | Selection, measurements     |
-| `--danger`     | `#dc2626` | Delete, problems            |
-| `INK`          | `#3b2f2a` | Furniture outlines          |
-| `FLOOR_COLOR`  | `#f4ede1` | Floor in the 2D plan        |
+| Token            | Value     | Use                                                        |
+| ---------------- | --------- | ---------------------------------------------------------- |
+| `--bg`           | `#f5f1ea` | Canvas and app background (paper)                          |
+| `--panel`        | `#fffdf9` | Toolbar and sidebars (warm white)                          |
+| `--float`        | `#ffffff` | Popovers, floating controls and inputs over panels         |
+| `--sunken`       | `#f3eee6` | Segmented control tracks, chips, hover                     |
+| `--ink`          | `#2f2622` | Text                                                       |
+| `--muted`        | `#74685e` | Labels and secondary text (AA on `--panel`)                |
+| `--line`         | `#e6ded2` | Borders and dividers                                       |
+| `--accent`       | `#2f6f5e` | The one primary action, active tab, focus ring             |
+| `--accent-soft`  | `#e4efea` | Hover on catalog items, input focus halo                   |
+| `--danger`       | `#c2413b` | Delete, layout problems                                    |
+| `--ok`           | `#3c7a4a` | "All good" states                                          |
+| `INK`            | `#3b2f2a` | Furniture outlines                                         |
+| `FLOOR_COLOR`    | `#f4ede1` | Floor in the 2D plan                                       |
 
-### Target palette
+Rules:
 
-The cream base and brown ink already fit. The cold blue accent and pure white panels do not. Proposed tokens:
-
-| Token            | Value     | Role                                                      |
-| ---------------- | --------- | --------------------------------------------------------- |
-| `--bg`           | `#f7f1e6` | Paper. Optional faint paper-grain texture                 |
-| `--panel`        | `#fffaf2` | Panels, sheets (warm white)                               |
-| `--ink`          | `#3b2f2a` | Text and outlines (same as `INK`, one ink for everything) |
-| `--muted`        | `#8a7a6c` | Secondary text                                            |
-| `--line`         | `#eadfce` | Soft borders                                              |
-| `--accent`       | `#e8875b` | Terracotta: primary buttons, selection                    |
-| `--accent-soft`  | `#fbe3d6` | Selected backgrounds, hover                               |
-| `--measure`      | `#4a8fb8` | Dimension lines and distance labels (kept distinct from accent so numbers stay readable) |
-| `--leaf`         | `#7fb069` | Success, plants, "all good"                               |
-| `--sun`          | `#f6c35b` | Sun, lamps, highlights                                    |
-| `--blush`        | `#f4b6c2` | Kawaii accent: cheeks, hearts, tiny decorations only      |
-| `--night`        | `#3d3a5c` | Night mode overlay base                                   |
-| `--danger`       | `#d9534f` | Problems. Warm red, still clearly a warning               |
-
-Contrast rule: body text on `--bg` and `--panel` must meet WCAG AA (4.5:1). `--accent` is for fills with `--ink` or white bold text, not for small text on cream.
+- One primary button per screen area (toolbar: "Chia sẻ"). Everything else is a quiet default or ghost button.
+- Measurements and selection on the canvas keep their own blue, so numbers never look like buttons.
+- Body text on `--bg` and `--panel` must meet WCAG AA (4.5:1). White text only on `--accent` or darker.
 
 ## Typography
 
@@ -66,15 +54,24 @@ Contrast rule: body text on `--bg` and `--panel` must meet WCAG AA (4.5:1). `--a
 - **Headings and brand:** a soft display face with storybook character, for example [Baloo 2](https://fonts.google.com/specimen/Baloo+2) (Vietnamese support). Only for the logo, panel titles and empty states.
 - Never use a script or handwriting font for labels, sizes or warnings.
 
-## Shape and depth
+## Shape, spacing and depth
 
-| Element            | Rule                                                                  |
-| ------------------ | --------------------------------------------------------------------- |
-| Buttons, inputs    | Radius 12px. Pill (999px) for toggles and segmented controls          |
-| Cards, panels      | Radius 16px. Bottom sheet on mobile: 20px top corners                 |
-| Shadows            | Soft and warm: `0 4px 14px rgba(59, 47, 42, 0.10)`. No black shadows  |
-| Borders            | 1.5px in `--line`, or none when a shadow already separates            |
-| Resize handles     | Round dots with a white fill and an ink outline, not squares          |
+| Element            | Rule                                                                         |
+| ------------------ | ---------------------------------------------------------------------------- |
+| Spacing            | 4px scale (`--s1` 4 … `--s6` 24)                                             |
+| Buttons, inputs    | 32px high (40px on touch), radius `--r-md` 10px                              |
+| Segmented controls | Sunken track, the active option is a raised white chip                       |
+| Popovers, cards    | Radius `--r-lg` 14px                                                         |
+| Shadows            | Only on floating layers (`--shadow-float`, `--shadow-pop`). Panels use lines |
+| Hierarchy          | Type, spacing and dividers. No cards nested in cards                         |
+| Focus              | Every control shows a 2px `--accent` ring on `:focus-visible`                |
+
+## Layout
+
+- Canvas first. Toolbar on one line: view · light · history, then help, export, share (primary) and a "⋯" menu for file actions.
+- Left sidebar has two tabs, "Nội thất" (library) and "Phòng" (size, direction, starter rooms). Right sidebar is the inspector: room overview when nothing is selected, the item's properties when something is.
+- Both sidebars collapse to a 44px rail; the room refits to the space.
+- Keyboard shortcuts live in the help popover, not on screen.
 
 ## Illustration and furniture
 
@@ -126,8 +123,8 @@ The 2D plan and the catalog thumbnails are the heart of the style. They are draw
 
 ## Rollout
 
-1. Swap the CSS tokens in `apps/web/src/styles/index.css` to the target palette, radii and shadows.
+1. ~~Swap the CSS tokens in `apps/web/src/styles/index.css`~~ (done: hybrid shell tokens above).
 2. Load the fonts and switch numbers to tabular figures.
 3. Round the resize handles and restyle the measurement labels with `--measure`.
-4. Replace emoji with one icon set.
+4. ~~Replace emoji with one icon set~~ (done: lucide).
 5. Add empty-state illustrations and the add-item pop animation.
